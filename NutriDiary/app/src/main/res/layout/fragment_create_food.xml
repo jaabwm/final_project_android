@@ -74,11 +74,18 @@
                     android:text="Serving Size*" />
 
                 <EditText
-                    android:id="@+id/etServingSize"
-                    android:layout_width="match_parent"
+                    android:id="@+id/etServingSizeUnit"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:ems="10"
                     android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/etServingSizeMeasurement"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2" />
 
             </LinearLayout>
 
@@ -92,7 +99,7 @@
                     android:text="Calories*" />
 
                 <EditText
-                    android:id="@+id/etCal"
+                    android:id="@+id/etCalories"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -128,7 +135,7 @@
                     android:text="Total Carbohydrates (g)" />
 
                 <EditText
-                    android:id="@+id/etCarb"
+                    android:id="@+id/etCarbohydrates"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"

@@ -1,6 +1,7 @@
 package com.jabwrb.nutridiary.fragment;
 
 
+import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,16 +18,22 @@ import android.widget.Button;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
+import com.jabwrb.nutridiary.database.Food;
+import com.jabwrb.nutridiary.database.NutriDiaryDb;
+import com.jabwrb.nutridiary.task.LoadMyFoodTask;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SelectFoodFragment extends Fragment implements View.OnClickListener {
 
+    private NutriDiaryDb nutriDiaryDb;
+    private SelectFoodFragmentListener listener;
     private Button btnCreate;
     private RecyclerView recyclerView;
     private FoodRecyclerViewAdapter foodRecyclerViewAdapter;
-    private SelectFoodFragmentListener listener;
 
     public interface SelectFoodFragmentListener {
         void onBtnCreatePressed();
@@ -40,8 +47,27 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        foodRecyclerViewAdapter = new FoodRecyclerViewAdapter(getActivity());
+        nutriDiaryDb = Room.databaseBuilder(getActivity(),
+                NutriDiaryDb.class, "NutriDiary.db")
+                .fallbackToDestructiveMigration()
+                .build();
+
         listener = (SelectFoodFragmentListener) getActivity();
+
+        foodRecyclerViewAdapter = new FoodRecyclerViewAdapter(getActivity());
+
+        queryFoods();
+    }
+
+    private void queryFoods() {
+        new LoadMyFoodTask(nutriDiaryDb, new LoadMyFoodTask.OnFoodLoadListener() {
+            @Override
+            public void onFoodLoaded(List<Food> foods) {
+                foodRecyclerViewAdapter.setData(foods);
+                foodRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        }).execute();
+
     }
 
     @Override

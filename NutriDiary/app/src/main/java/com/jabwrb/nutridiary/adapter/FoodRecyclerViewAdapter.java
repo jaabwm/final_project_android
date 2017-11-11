@@ -8,44 +8,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jabwrb.nutridiary.R;
+import com.jabwrb.nutridiary.database.Food;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.ViewHolder> {
 
-    /*- Listener -----------------------------------------------------------------------------*/
+    private Context context;
+    private FoodRecyclerViewAdapterListener listener;
+    private List<Food> data;
+
     public interface FoodRecyclerViewAdapterListener {
         void onItemClickedListener(String foodName);
     }
 
-    private FoodRecyclerViewAdapterListener listener;
-
-    /*- Attributes ---------------------------------------------------------------------------*/
-    // Demo data of user's saved food
-    String[] data = {
-            "whole egg",
-            "raw boneless, skinless chicken breast",
-            "Abiyuch, raw",
-            "Acerola, (west indian cherry), raw",
-            "Alcoholic beverage, beer, light",
-            "Alcoholic beverage, beer, light, BUD LIGHT",
-            "Alcoholic beverage, beer, light, BUDWEISER SELECT",
-            "Alcoholic beverage, beer, light, higher alcohol",
-            "Alcoholic beverage, beer, light, low carb",
-            "Alcoholic beverage, beer, regular, all",
-            "Alcoholic beverage, beer, regular, BUDWEISER",
-            "Alcoholic beverage, creme de menthe, 72 proof",
-            "Alcoholic beverage, daiquiri, canned",
-            "Alcoholic beverage, daiquiri, prepared-from-recipe",
-            "Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 100 proof"
-    };
-
-    private Context context;
-
-    /*- FoodRecyclerViewAdapter --------------------------------------------------------------*/
     public FoodRecyclerViewAdapter(Context context) {
         this.context = context;
         listener = (FoodRecyclerViewAdapterListener) context;
-
-        // TODO: get user's saved food from database and set to "data" attribute.
+        data = new ArrayList<>();
     }
 
     @Override
@@ -60,21 +41,20 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // set each food name in data to TextView
-        holder.textViewFoodName.setText(data[position]);
+        holder.textViewFoodName.setText(data.get(position).getName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClickedListener(data[position]);
+                listener.onItemClickedListener(data.get(position).getName());
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return data.length;
+        return data.size();
     }
 
-    /*- ViewHolder class --------------------------------------------------------------------*/
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewFoodName;
@@ -83,5 +63,9 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
             super(itemView);
             textViewFoodName = (TextView) itemView.findViewById(R.id.textViewFoodName);
         }
+    }
+
+    public void setData(List<Food> data) {
+        this.data = data;
     }
 }

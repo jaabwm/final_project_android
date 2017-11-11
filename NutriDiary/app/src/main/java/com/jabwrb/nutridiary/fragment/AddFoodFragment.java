@@ -17,19 +17,15 @@ import com.jabwrb.nutridiary.R;
  */
 public class AddFoodFragment extends Fragment implements View.OnClickListener {
 
-    /*- Listener -----------------------------------------------------------------------------*/
+    private AddFoodFragmentListener listener;
+    private String foodName;
+    private TextView textViewFoodName;
+    private Button btnAddToDiary;
+
     public interface AddFoodFragmentListener {
         void onAddToDiaryPressed(String foodName);
     }
 
-    private AddFoodFragmentListener listener;
-
-    /*- Attributes ---------------------------------------------------------------------------*/
-    String foodName;
-    private TextView textViewFoodName;
-    private Button btnAddToDiary;
-
-    /*- AddFoodFragment ----------------------------------------------------------------------*/
     public AddFoodFragment() {
         // Required empty public constructor
     }

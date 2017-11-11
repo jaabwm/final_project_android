@@ -23,19 +23,14 @@ import com.jabwrb.nutridiary.R;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = "HomeFragment";
+    private HomeFragmentListener listener;
+    private Button btnAddBreakfast;
+    private TableLayout tableLayout;
 
-    /*- Listener -----------------------------------------------------------------------------*/
     public interface HomeFragmentListener {
         void onBtnAddBreakfastPressed();
     }
 
-    private HomeFragmentListener listener;
-
-    /*- Attributes ---------------------------------------------------------------------------*/
-    private Button btnAddBreakfast;
-    private TableLayout tableLayout;
-
-    /*- HomeFragment -------------------------------------------------------------------------*/
     public HomeFragment() {
         // Required empty public constructor
     }
