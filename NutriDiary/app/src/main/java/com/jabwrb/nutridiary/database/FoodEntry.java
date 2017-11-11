@@ -12,7 +12,9 @@ public class FoodEntry {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private int food_id;
+    private int foodId;
+
+    private float amount;
 
     private String meal;
 
@@ -27,12 +29,20 @@ public class FoodEntry {
         this.id = id;
     }
 
-    public int getFood_id() {
-        return food_id;
+    public int getFoodId() {
+        return foodId;
     }
 
-    public void setFood_id(int food_id) {
-        this.food_id = food_id;
+    public void setFoodId(int foodId) {
+        this.foodId = foodId;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
     }
 
     public String getMeal() {

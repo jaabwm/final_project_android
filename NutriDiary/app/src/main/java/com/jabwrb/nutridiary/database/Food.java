@@ -2,9 +2,11 @@ package com.jabwrb.nutridiary.database;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 @Entity
-public class Food {
+public class Food implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -34,6 +36,38 @@ public class Food {
     private float sugars;
 
     private float protein;
+
+    public Food() {
+    }
+
+    protected Food(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        brand = in.readString();
+        servingSizeUnit = in.readInt();
+        servingSizeMeasurement = in.readString();
+        calories = in.readInt();
+        fat = in.readFloat();
+        cholesterol = in.readFloat();
+        sodium = in.readFloat();
+        saturatedFat = in.readFloat();
+        carbohydrates = in.readFloat();
+        dietaryFiber = in.readFloat();
+        sugars = in.readFloat();
+        protein = in.readFloat();
+    }
+
+    public static final Creator<Food> CREATOR = new Creator<Food>() {
+        @Override
+        public Food createFromParcel(Parcel in) {
+            return new Food(in);
+        }
+
+        @Override
+        public Food[] newArray(int size) {
+            return new Food[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -145,5 +179,28 @@ public class Food {
 
     public void setProtein(float protein) {
         this.protein = protein;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(brand);
+        parcel.writeInt(servingSizeUnit);
+        parcel.writeString(servingSizeMeasurement);
+        parcel.writeInt(calories);
+        parcel.writeFloat(fat);
+        parcel.writeFloat(cholesterol);
+        parcel.writeFloat(sodium);
+        parcel.writeFloat(saturatedFat);
+        parcel.writeFloat(carbohydrates);
+        parcel.writeFloat(dietaryFiber);
+        parcel.writeFloat(sugars);
+        parcel.writeFloat(protein);
     }
 }

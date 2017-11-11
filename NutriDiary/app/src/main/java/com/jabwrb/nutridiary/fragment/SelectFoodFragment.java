@@ -67,7 +67,6 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
                 foodRecyclerViewAdapter.notifyDataSetChanged();
             }
         }).execute();
-
     }
 
     @Override

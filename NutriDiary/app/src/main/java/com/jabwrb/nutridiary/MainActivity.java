@@ -5,10 +5,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
+import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.fragment.AddFoodFragment;
 import com.jabwrb.nutridiary.fragment.CreateFoodFragment;
 import com.jabwrb.nutridiary.fragment.HomeFragment;
 import com.jabwrb.nutridiary.fragment.SelectFoodFragment;
+import com.jabwrb.nutridiary.task.LoadFoodEntriesWithFoodTask;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.HomeFragmentListener,
                                                                FoodRecyclerViewAdapter.FoodRecyclerViewAdapterListener,
@@ -40,11 +42,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
     @Override
-    public void onItemClickedListener(String foodName) {
+    public void onItemClickedListener(Food food) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragmentContainer, new AddFoodFragment().newInstance(foodName))
+                .replace(R.id.fragmentContainer, new AddFoodFragment().newInstance(food))
                 .addToBackStack(null)
                 .commit();
     }

@@ -1,6 +1,7 @@
 package com.jabwrb.nutridiary.fragment;
 
 
+import android.arch.persistence.room.Room;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,9 +14,15 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jabwrb.nutridiary.InstanceData;
 import com.jabwrb.nutridiary.R;
+import com.jabwrb.nutridiary.database.FoodEntryWithFood;
+import com.jabwrb.nutridiary.database.NutriDiaryDb;
+import com.jabwrb.nutridiary.task.LoadFoodEntriesWithFoodTask;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +30,7 @@ import com.jabwrb.nutridiary.R;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = "HomeFragment";
+    private NutriDiaryDb nutriDiaryDb;
     private HomeFragmentListener listener;
     private Button btnAddBreakfast;
     private TableLayout tableLayout;
@@ -47,7 +55,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        
+
+        nutriDiaryDb = Room.databaseBuilder(getActivity(),
+                NutriDiaryDb.class, "NutriDiary.db")
+                .fallbackToDestructiveMigration()
+                .build();
+
         btnAddBreakfast = (Button) view.findViewById(R.id.btnAddBreakfast);
         btnAddBreakfast.setOnClickListener(this);
 
@@ -114,5 +127,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public void addToDiary(String foodName) {
         InstanceData.history.add(foodName);
+
+        new LoadFoodEntriesWithFoodTask(nutriDiaryDb, new LoadFoodEntriesWithFoodTask.OnFoodLoadListener() {
+            @Override
+            public void onFoodLoaded(List<FoodEntryWithFood> foodEntryWithFoodList) {
+                Toast.makeText(getActivity(), "Loaded " + foodEntryWithFoodList.size() + " rows.", Toast.LENGTH_SHORT).show();
+            }
+        }).execute();
     }
 }

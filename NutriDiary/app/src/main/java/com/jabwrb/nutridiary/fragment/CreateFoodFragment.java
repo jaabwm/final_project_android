@@ -1,7 +1,6 @@
 package com.jabwrb.nutridiary.fragment;
 
 
-import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

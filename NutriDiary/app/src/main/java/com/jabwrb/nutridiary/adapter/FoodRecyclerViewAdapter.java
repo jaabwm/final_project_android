@@ -20,7 +20,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
     private List<Food> data;
 
     public interface FoodRecyclerViewAdapterListener {
-        void onItemClickedListener(String foodName);
+        void onItemClickedListener(Food foodName);
     }
 
     public FoodRecyclerViewAdapter(Context context) {
@@ -45,7 +45,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClickedListener(data.get(position).getName());
+                listener.onItemClickedListener(data.get(position));
             }
         });
     }
