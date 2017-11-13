@@ -1,13 +1,16 @@
-package com.jabwrb.nutridiary;
+package com.jabwrb.nutridiary.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.fragment.AddFoodFragment;
 import com.jabwrb.nutridiary.fragment.CreateFoodFragment;
+import com.jabwrb.nutridiary.fragment.DatePickerFragment;
 import com.jabwrb.nutridiary.fragment.HomeFragment;
 import com.jabwrb.nutridiary.fragment.SelectFoodFragment;
 import com.jabwrb.nutridiary.task.LoadFoodEntriesWithFoodTask;
@@ -42,6 +45,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
     @Override
+    public void onBtnDatePickerPressed() {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.setTargetFragment(getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG), 0);
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    @Override
     public void onItemClickedListener(Food food) {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -52,13 +62,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
     @Override
-    public void onAddToDiaryPressed(String foodName) {
-        HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
-
+    public void onAddToDiaryPressed() {
         getSupportFragmentManager().popBackStack();
         getSupportFragmentManager().popBackStack();
-
-        fragment.addToDiary(foodName);
     }
 
     @Override

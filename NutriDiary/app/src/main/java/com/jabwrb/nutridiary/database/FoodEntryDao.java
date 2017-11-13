@@ -12,8 +12,8 @@ import java.util.List;
 @TypeConverters({DateConverter.class})
 public interface FoodEntryDao {
 
-    @Query("SELECT * FROM FoodEntry WHERE date BETWEEN :dayst AND :dayet")
-    List<FoodEntryWithFood> loadFoodEntriesWithFood(Date dayst, Date dayet);
+    @Query("SELECT * FROM FoodEntry WHERE date BETWEEN :dayStart AND :dayEnd")
+    List<FoodEntryWithFood> loadFoodEntriesWithFood(Date dayStart, Date dayEnd);
 
     @Insert
     void insert(FoodEntry foodEntry);

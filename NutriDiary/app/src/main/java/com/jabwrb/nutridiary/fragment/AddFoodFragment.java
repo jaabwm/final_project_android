@@ -52,7 +52,7 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
     private TextView tvBrand;
 
     public interface AddFoodFragmentListener {
-        void onAddToDiaryPressed(String foodName);
+        void onAddToDiaryPressed();
     }
 
     public AddFoodFragment() {
@@ -176,7 +176,7 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
         new AddToDiaryTask(nutriDiaryDb, new AddToDiaryTask.OnFoodAddListener() {
             @Override
             public void onFoodAdded() {
-                listener.onAddToDiaryPressed(food.getName());
+                listener.onAddToDiaryPressed();
             }
         }).execute(foodEntry);
     }

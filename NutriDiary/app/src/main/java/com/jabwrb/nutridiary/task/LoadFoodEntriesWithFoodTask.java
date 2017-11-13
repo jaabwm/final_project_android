@@ -7,10 +7,11 @@ import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.database.FoodEntryWithFood;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class LoadFoodEntriesWithFoodTask extends AsyncTask<Void, Void, List<FoodEntryWithFood>> {
+public class LoadFoodEntriesWithFoodTask extends AsyncTask<Date, Void, List<FoodEntryWithFood>> {
 
     private NutriDiaryDb db;
     private OnFoodLoadListener listener;
@@ -25,20 +26,22 @@ public class LoadFoodEntriesWithFoodTask extends AsyncTask<Void, Void, List<Food
     }
 
     @Override
-    protected List<FoodEntryWithFood> doInBackground(Void... voids) {
-        // Today at 00:00.00
-        Date dayst = new Date();
-        dayst.setHours(0);
-        dayst.setMinutes(0);
-        dayst.setSeconds(0);
-        Date dayet = new Date();
+    protected List<FoodEntryWithFood> doInBackground(Date... dates) {
+        // Date at 00:00.00
+        Date dayStart = new Date(dates[0].getTime());
+        dayStart.setHours(0);
+        dayStart.setMinutes(0);
+        dayStart.setSeconds(0);
 
-        // Today at 23:59.59
-        dayet.setHours(23);
-        dayet.setMinutes(59);
-        dayet.setSeconds(59);
+        // Date at 23:59.59
+        Date dayEnd = new Date(dates[0].getTime());
+        dayEnd.setHours(23);
+        dayEnd.setMinutes(59);
+        dayEnd.setSeconds(59);
 
-        return db.foodEntryDao().loadFoodEntriesWithFood(dayst, dayet);
+        System.out.println("Query between " + dayStart.toString() + " and " + dayEnd.toString());
+
+        return db.foodEntryDao().loadFoodEntriesWithFood(dayStart, dayEnd);
     }
 
     @Override
