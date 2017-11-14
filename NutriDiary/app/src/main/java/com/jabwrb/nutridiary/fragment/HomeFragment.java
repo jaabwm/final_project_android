@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.jabwrb.nutridiary.R;
+import com.jabwrb.nutridiary.activity.MainActivity;
 import com.jabwrb.nutridiary.adapter.FoodEntryRecyclerViewAdapter;
 import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.FoodEntry;
@@ -37,7 +38,6 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     public static final String TAG = HomeFragment.class.getSimpleName();
-    private static final String KEY_CURRENT_DATE = "currentDate";
     private NutriDiaryDb db;
     private HomeFragmentListener listener;
     private Button btnDatePicker;
@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     private FoodEntryRecyclerViewAdapter adapterLunch;
     private FoodEntryRecyclerViewAdapter adapterDinner;
     private FoodEntryRecyclerViewAdapter adapterSnack;
-    private Date currentDate;
+    public Date currentDate;
 
     public interface HomeFragmentListener {
         void onBtnAddBreakfastPressed();
@@ -73,12 +73,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         adapterLunch = new FoodEntryRecyclerViewAdapter(getActivity());
         adapterDinner = new FoodEntryRecyclerViewAdapter(getActivity());
         adapterSnack = new FoodEntryRecyclerViewAdapter(getActivity());
-
-        if (savedInstanceState == null) {
-            currentDate = new Date();
-        } else {
-            currentDate = new Date(savedInstanceState.getLong(KEY_CURRENT_DATE));
-        }
     }
 
     @Override
@@ -87,18 +81,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        currentDate = ((MainActivity) getActivity()).getCurrentDate();
+
         setup(view);
 
         queryFoodEntries(currentDate);
 
         return view;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putLong(KEY_CURRENT_DATE, currentDate.getTime());
     }
 
     private void setup(View view) {
@@ -212,6 +201,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
 
         currentDate = calendar.getTime();
 
+        ((MainActivity) getActivity()).setCurrentDate(currentDate);
         setBtnDatePickerInfo(currentDate);
         queryFoodEntries(currentDate);
     }

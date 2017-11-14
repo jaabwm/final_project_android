@@ -17,12 +17,17 @@ import com.jabwrb.nutridiary.fragment.DatePickerFragment;
 import com.jabwrb.nutridiary.fragment.HomeFragment;
 import com.jabwrb.nutridiary.fragment.SelectFoodFragment;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity implements HomeFragment.HomeFragmentListener,
                                                             SelectFoodFragment.SelectFoodFragmentListener,
                                                             CreateFoodFragment.CreateFoodFragmentListener,
                                                             AddFoodFragment.AddFoodFragmentListener,
                                                             FoodEntryRecyclerViewAdapter.OnFoodEntryClickListener,
                                                             FoodRecyclerViewAdapter.OnFoodClickListener {
+
+    private static final String KEY_CURRENT_DATE = "currentDate";
+    private Date currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +37,22 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         if (savedInstanceState == null) {
             DatabaseSingleton.getDatabaseInstance().initDb(getApplicationContext());
 
+            currentDate = new Date();
+
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragmentContainer, new HomeFragment(), HomeFragment.TAG)
                     .commit();
+        } else {
+            currentDate = new Date(savedInstanceState.getLong(KEY_CURRENT_DATE));
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong(KEY_CURRENT_DATE, currentDate.getTime());
     }
 
     @Override
@@ -92,5 +108,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     public void onFoodEntryLongClicked(FoodEntry foodEntry) {
         HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
         fragment.showDialogDelete(foodEntry);
+    }
+
+    public Date getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
     }
 }

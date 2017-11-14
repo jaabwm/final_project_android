@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jabwrb.nutridiary.R;
+import com.jabwrb.nutridiary.activity.MainActivity;
 import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.FoodEntry;
@@ -167,8 +168,8 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "Please enter amount.", Toast.LENGTH_SHORT).show();
         }
         foodEntry.setMeal(spinner.getSelectedItem().toString());
-        Date date = new Date();
-        foodEntry.setDate(date);
+        HomeFragment fragment = (HomeFragment) getFragmentManager().findFragmentByTag(HomeFragment.TAG);
+        foodEntry.setDate(((MainActivity) getActivity()).getCurrentDate());
 
         new AddToDiaryTask(db, new AddToDiaryTask.OnFoodAddListener() {
             @Override
