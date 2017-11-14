@@ -71,20 +71,20 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
     }
 
     private void setup(View view) {
-        etName = (EditText) view.findViewById(R.id.etName);
-        etBrand = (EditText) view.findViewById(R.id.etBrand);
-        etServingSizeUnit = (EditText) view.findViewById(R.id.etServingSizeUnit);
-        etServingSizeMeasurement = (EditText) view.findViewById(R.id.etServingSizeMeasurement);
-        etCalories = (EditText) view.findViewById(R.id.etCalories);
-        etFat = (EditText) view.findViewById(R.id.etFat);
-        etCarbohydrates = (EditText) view.findViewById(R.id.etCarbohydrates);
-        etProtein = (EditText) view.findViewById(R.id.etProtein);
-        etSaturatedFat = (EditText) view.findViewById(R.id.etSaturatedFat);
-        etChoresterol = (EditText) view.findViewById(R.id.etCholesterol);
-        etSodium = (EditText) view.findViewById(R.id.etSodium);
-        etDietaryFiber = (EditText) view.findViewById(R.id.etDietaryFiber);
-        etSugars = (EditText) view.findViewById(R.id.etSugars);
-        btnAdd = (Button) view.findViewById(R.id.btnAdd);
+        etName = view.findViewById(R.id.etName);
+        etBrand = view.findViewById(R.id.etBrand);
+        etServingSizeUnit = view.findViewById(R.id.etServingSizeUnit);
+        etServingSizeMeasurement = view.findViewById(R.id.etServingSizeMeasurement);
+        etCalories = view.findViewById(R.id.etCalories);
+        etFat = view.findViewById(R.id.etFat);
+        etCarbohydrates = view.findViewById(R.id.etCarbohydrates);
+        etProtein = view.findViewById(R.id.etProtein);
+        etSaturatedFat = view.findViewById(R.id.etSaturatedFat);
+        etChoresterol = view.findViewById(R.id.etCholesterol);
+        etSodium = view.findViewById(R.id.etSodium);
+        etDietaryFiber = view.findViewById(R.id.etDietaryFiber);
+        etSugars = view.findViewById(R.id.etSugars);
+        btnAdd = view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this);
     }
 

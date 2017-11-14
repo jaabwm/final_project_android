@@ -27,4 +27,9 @@ public class FoodEntryWithFood {
     public void setFoods(List<Food> foods) {
         this.foods = foods;
     }
+
+    public Food getFood() {
+        // Food entry will always have 1 Food.
+        return foods.get(0);
+    }
 }

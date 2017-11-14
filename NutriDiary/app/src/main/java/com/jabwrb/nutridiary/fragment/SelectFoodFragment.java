@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -89,11 +90,11 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
     private void setup(View view) {
         // Toolbar
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.listFood);
+        recyclerView = view.findViewById(R.id.listFood);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
@@ -102,7 +103,7 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
         });
         recyclerView.setAdapter(foodRecyclerViewAdapter);
 
-        btnCreate = (Button) view.findViewById(R.id.btnCreate);
+        btnCreate = view.findViewById(R.id.btnCreate);
         btnCreate.setOnClickListener(this);
     }
 

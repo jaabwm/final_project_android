@@ -6,20 +6,22 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jabwrb.nutridiary.R;
+import com.jabwrb.nutridiary.adapter.FoodEntryRecyclerViewAdapter;
 import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
 import com.jabwrb.nutridiary.database.Food;
+import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.fragment.AddFoodFragment;
 import com.jabwrb.nutridiary.fragment.CreateFoodFragment;
 import com.jabwrb.nutridiary.fragment.DatePickerFragment;
 import com.jabwrb.nutridiary.fragment.HomeFragment;
 import com.jabwrb.nutridiary.fragment.SelectFoodFragment;
-import com.jabwrb.nutridiary.task.LoadFoodEntriesWithFoodTask;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.HomeFragmentListener,
-                                                               FoodRecyclerViewAdapter.FoodRecyclerViewAdapterListener,
-                                                               AddFoodFragment.AddFoodFragmentListener,
-                                                               SelectFoodFragment.SelectFoodFragmentListener,
-                                                               CreateFoodFragment.CreateFoodFragmentListener {
+                                                            SelectFoodFragment.SelectFoodFragmentListener,
+                                                            CreateFoodFragment.CreateFoodFragmentListener,
+                                                            AddFoodFragment.AddFoodFragmentListener,
+                                                            FoodEntryRecyclerViewAdapter.OnFoodEntryClickListener,
+                                                            FoodRecyclerViewAdapter.OnFoodClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
     @Override
-    public void onItemClickedListener(Food food) {
+    public void onFoodClicked(Food food) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -81,5 +83,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     public void onBtnAddPressed() {
         getSupportFragmentManager().popBackStack();
         getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onFoodEntryLongClicked(FoodEntry foodEntry) {
+        HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
+        fragment.showDialogDelete(foodEntry);
     }
 }

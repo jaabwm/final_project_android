@@ -117,13 +117,11 @@
                 </TableRow>
             </TableLayout>
 
-            <TableLayout
-                android:id="@+id/tableLayoutBreakfastItems"
-                android:layout_width="fill_parent"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listBreakfast"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-            </TableLayout>
+                android:layout_marginBottom="16dp" />
 
             <!-- Lunch -->
             <TableLayout
@@ -149,13 +147,11 @@
                 </TableRow>
             </TableLayout>
 
-            <TableLayout
-                android:id="@+id/tableLayoutLunchItems"
-                android:layout_width="fill_parent"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listLunch"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-            </TableLayout>
+                android:layout_marginBottom="16dp" />
 
             <!-- Dinner -->
             <TableLayout
@@ -181,13 +177,11 @@
                 </TableRow>
             </TableLayout>
 
-            <TableLayout
-                android:id="@+id/tableLayoutDinnerItems"
-                android:layout_width="fill_parent"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listDinner"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-            </TableLayout>
+                android:layout_marginBottom="16dp" />
 
             <!-- Snack -->
             <TableLayout
@@ -213,14 +207,11 @@
                 </TableRow>
             </TableLayout>
 
-            <TableLayout
-                android:id="@+id/tableLayoutSnackItems"
-                android:layout_width="fill_parent"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listSnack"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-
-            </TableLayout>
+                android:layout_marginBottom="16dp" />
         </LinearLayout>
     </ScrollView>
 
