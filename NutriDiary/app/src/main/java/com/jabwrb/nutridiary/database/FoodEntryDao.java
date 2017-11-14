@@ -1,6 +1,7 @@
 package com.jabwrb.nutridiary.database;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.TypeConverters;
@@ -17,4 +18,7 @@ public interface FoodEntryDao {
 
     @Insert
     void insert(FoodEntry foodEntry);
+
+    @Delete
+    void delete(FoodEntry foodEntry);
 }

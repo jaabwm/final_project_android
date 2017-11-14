@@ -3,10 +3,12 @@ package com.jabwrb.nutridiary.fragment;
 
 import android.app.DatePickerDialog;
 import android.arch.persistence.room.Room;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +18,14 @@ import android.widget.DatePicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.database.FoodEntryWithFood;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
+import com.jabwrb.nutridiary.task.DeleteFoodEntryTask;
 import com.jabwrb.nutridiary.task.LoadFoodEntriesWithFoodTask;
 
 import java.text.DecimalFormat;
@@ -36,6 +40,7 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     public static final String TAG = HomeFragment.class.getSimpleName();
+    private static final String KEY_CURRENT_DATE = "currentDate";
     private NutriDiaryDb nutriDiaryDb;
     private HomeFragmentListener listener;
     private Button btnDatePicker;
@@ -44,6 +49,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     private TableLayout tableLayoutLunchItems;
     private TableLayout tableLayoutDinnerItems;
     private TableLayout tableLayoutSnackItems;
+    private Date currentDate;
 
     public interface HomeFragmentListener {
         void onBtnAddBreakfastPressed();
@@ -64,6 +70,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
                 .build();
 
         listener = (HomeFragmentListener) getActivity();
+
+        if (savedInstanceState == null) {
+            currentDate = new Date();
+        } else {
+            currentDate = new Date(savedInstanceState.getLong(KEY_CURRENT_DATE));
+        }
     }
 
     @Override
@@ -74,15 +86,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
 
         setup(view);
 
-        queryFoodEntries(new Date());
+        queryFoodEntries(currentDate);
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong(KEY_CURRENT_DATE, currentDate.getTime());
     }
 
     private void setup(View view) {
         btnDatePicker = view.findViewById(R.id.btnDatePicker);
         btnDatePicker.setOnClickListener(this);
-        setBtnDatePickerInfo(new Date());
+        setBtnDatePickerInfo(currentDate);
 
         btnAddBreakfast = view.findViewById(R.id.btnAddBreakfast);
         btnAddBreakfast.setOnClickListener(this);
@@ -135,10 +154,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         }
     }
 
-    public void addTableRow(TableLayout tableLayout, FoodEntry foodEntry, Food food) {
+    public void addTableRow(TableLayout tableLayout, final FoodEntry foodEntry, Food food) {
         DecimalFormat formatter = new DecimalFormat("####.##");
 
         TableRow tableRow1 = new TableRow(getActivity());
+        tableRow1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showDialogDelete(foodEntry);
+
+                return false;
+            }
+        });
         tableRow1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         TableRow tableRow2 = new TableRow(getActivity());
@@ -195,10 +222,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
-        Date date = calendar.getTime();
 
-        setBtnDatePickerInfo(date);
-        queryFoodEntries(date);
+        currentDate = calendar.getTime();
+
+        setBtnDatePickerInfo(currentDate);
+        queryFoodEntries(currentDate);
     }
 
     private void setBtnDatePickerInfo(Date date) {
@@ -233,5 +261,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         }
 
         btnDatePicker.setText(new SimpleDateFormat("d MMM yyyy").format(date));
+    }
+
+    private void showDialogDelete(final FoodEntry foodEntry) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Delete this entry?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteFoodEntry(foodEntry);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private void deleteFoodEntry(FoodEntry foodEntry) {
+        new DeleteFoodEntryTask(nutriDiaryDb, new DeleteFoodEntryTask.OnFoodEntryDeleteListener() {
+            @Override
+            public void onFoodEntryDeleted() {
+                queryFoodEntries(currentDate);
+                Toast.makeText(getActivity(), "Deleted.", Toast.LENGTH_SHORT).show();
+            }
+        }).execute(foodEntry);
     }
 }
