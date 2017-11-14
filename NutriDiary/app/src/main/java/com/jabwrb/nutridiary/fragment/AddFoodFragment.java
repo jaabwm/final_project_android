@@ -1,7 +1,6 @@
 package com.jabwrb.nutridiary.fragment;
 
 
-import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jabwrb.nutridiary.R;
+import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
@@ -32,7 +32,7 @@ import java.util.Date;
 public class AddFoodFragment extends Fragment implements View.OnClickListener {
 
     public static final String KEY_FOOD = "food";
-    private NutriDiaryDb nutriDiaryDb;
+    private NutriDiaryDb db;
     private AddFoodFragmentListener listener;
     private Food food;
     private EditText etAmount;
@@ -74,10 +74,7 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
 
         food = getArguments().getParcelable(KEY_FOOD);
 
-        nutriDiaryDb = Room.databaseBuilder(getActivity(),
-                NutriDiaryDb.class, "NutriDiary.db")
-                .fallbackToDestructiveMigration()
-                .build();
+        db = DatabaseSingleton.getDatabaseInstance().getDb();
 
         listener = (AddFoodFragmentListener) getActivity();
     }
@@ -173,7 +170,7 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
         Date date = new Date();
         foodEntry.setDate(date);
 
-        new AddToDiaryTask(nutriDiaryDb, new AddToDiaryTask.OnFoodAddListener() {
+        new AddToDiaryTask(db, new AddToDiaryTask.OnFoodAddListener() {
             @Override
             public void onFoodAdded() {
                 listener.onAddToDiaryPressed();

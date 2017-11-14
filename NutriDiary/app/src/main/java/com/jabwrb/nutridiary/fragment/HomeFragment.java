@@ -2,36 +2,29 @@ package com.jabwrb.nutridiary.fragment;
 
 
 import android.app.DatePickerDialog;
-import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.adapter.FoodEntryRecyclerViewAdapter;
-import com.jabwrb.nutridiary.database.Food;
+import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.database.FoodEntryWithFood;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
 import com.jabwrb.nutridiary.task.DeleteFoodEntryTask;
 import com.jabwrb.nutridiary.task.LoadFoodEntriesWithFoodTask;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,7 +38,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
 
     public static final String TAG = HomeFragment.class.getSimpleName();
     private static final String KEY_CURRENT_DATE = "currentDate";
-    private NutriDiaryDb nutriDiaryDb;
+    private NutriDiaryDb db;
     private HomeFragmentListener listener;
     private Button btnDatePicker;
     private Button btnAddBreakfast;
@@ -72,10 +65,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        nutriDiaryDb = Room.databaseBuilder(getActivity(),
-                NutriDiaryDb.class, "NutriDiary.db")
-                .fallbackToDestructiveMigration()
-                .build();
+        db = DatabaseSingleton.getDatabaseInstance().getDb();
 
         listener = (HomeFragmentListener) getActivity();
 
@@ -156,7 +146,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     }
 
     private void queryFoodEntries(Date date) {
-        new LoadFoodEntriesWithFoodTask(nutriDiaryDb, new LoadFoodEntriesWithFoodTask.OnFoodLoadListener() {
+        new LoadFoodEntriesWithFoodTask(db, new LoadFoodEntriesWithFoodTask.OnFoodLoadListener() {
             @Override
             public void onFoodLoaded(List<FoodEntryWithFood> foodEntryWithFoodList) {
                 updateDiary(foodEntryWithFoodList);
@@ -278,7 +268,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     }
 
     private void deleteFoodEntry(FoodEntry foodEntry) {
-        new DeleteFoodEntryTask(nutriDiaryDb, new DeleteFoodEntryTask.OnFoodEntryDeleteListener() {
+        new DeleteFoodEntryTask(db, new DeleteFoodEntryTask.OnFoodEntryDeleteListener() {
             @Override
             public void onFoodEntryDeleted() {
                 queryFoodEntries(currentDate);

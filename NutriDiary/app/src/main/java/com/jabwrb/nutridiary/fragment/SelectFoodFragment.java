@@ -1,12 +1,10 @@
 package com.jabwrb.nutridiary.fragment;
 
 
-import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +17,7 @@ import android.widget.Button;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
+import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
 import com.jabwrb.nutridiary.task.LoadMyFoodTask;
@@ -30,7 +29,7 @@ import java.util.List;
  */
 public class SelectFoodFragment extends Fragment implements View.OnClickListener {
 
-    private NutriDiaryDb nutriDiaryDb;
+    private NutriDiaryDb db;
     private SelectFoodFragmentListener listener;
     private Button btnCreate;
     private RecyclerView recyclerView;
@@ -48,10 +47,7 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        nutriDiaryDb = Room.databaseBuilder(getActivity(),
-                NutriDiaryDb.class, "NutriDiary.db")
-                .fallbackToDestructiveMigration()
-                .build();
+        db = DatabaseSingleton.getDatabaseInstance().getDb();
 
         listener = (SelectFoodFragmentListener) getActivity();
 
@@ -61,7 +57,7 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
     }
 
     private void queryFoods() {
-        new LoadMyFoodTask(nutriDiaryDb, new LoadMyFoodTask.OnFoodLoadListener() {
+        new LoadMyFoodTask(db, new LoadMyFoodTask.OnFoodLoadListener() {
             @Override
             public void onFoodLoaded(List<Food> foods) {
                 foodRecyclerViewAdapter.setData(foods);

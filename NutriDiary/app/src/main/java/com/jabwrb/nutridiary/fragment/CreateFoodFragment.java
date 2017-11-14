@@ -1,7 +1,6 @@
 package com.jabwrb.nutridiary.fragment;
 
 
-import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.jabwrb.nutridiary.R;
+import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
 import com.jabwrb.nutridiary.task.CreateFoodTask;
@@ -22,7 +22,7 @@ import com.jabwrb.nutridiary.task.CreateFoodTask;
  */
 public class CreateFoodFragment extends Fragment implements View.OnClickListener {
 
-    private NutriDiaryDb nutriDiaryDb;
+    private NutriDiaryDb db;
     private CreateFoodFragmentListener listener;
     private EditText etName;
     private EditText etBrand;
@@ -51,10 +51,7 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        nutriDiaryDb = Room.databaseBuilder(getActivity(),
-                NutriDiaryDb.class, "NutriDiary.db")
-                .fallbackToDestructiveMigration()
-                .build();
+        db = DatabaseSingleton.getDatabaseInstance().getDb();
 
         listener = (CreateFoodFragmentListener) getActivity();
     }
@@ -128,7 +125,7 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
             return;
         }
 
-        new CreateFoodTask(nutriDiaryDb, new CreateFoodTask.OnFoodCreateListener() {
+        new CreateFoodTask(db, new CreateFoodTask.OnFoodCreateListener() {
             @Override
             public void onFoodCreated() {
                 listener.onBtnAddPressed();

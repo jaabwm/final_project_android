@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.adapter.FoodEntryRecyclerViewAdapter;
 import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
+import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.fragment.AddFoodFragment;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
+            DatabaseSingleton.getDatabaseInstance().initDb(getApplicationContext());
+
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragmentContainer, new HomeFragment(), HomeFragment.TAG)
