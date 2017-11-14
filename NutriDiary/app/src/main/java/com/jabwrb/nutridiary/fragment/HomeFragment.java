@@ -14,18 +14,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.activity.MainActivity;
 import com.jabwrb.nutridiary.adapter.FoodEntryRecyclerViewAdapter;
 import com.jabwrb.nutridiary.database.DatabaseSingleton;
+import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.database.FoodEntryWithFood;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
 import com.jabwrb.nutridiary.task.DeleteFoodEntryTask;
 import com.jabwrb.nutridiary.task.LoadFoodEntriesWithFoodTask;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +46,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     private HomeFragmentListener listener;
     private Button btnDatePicker;
     private Button btnAddBreakfast;
+    private TextView tvCalEaten;
+    private TextView tvFatEaten;
+    private TextView tvCarbsEaten;
+    private TextView tvProteinEaten;
+    private LinearLayout linearLayoutBreakfast;
+    private LinearLayout linearLayoutLunch;
+    private LinearLayout linearLayoutDinner;
+    private LinearLayout linearLayoutSnack;
     private RecyclerView listBreakfast;
     private RecyclerView listLunch;
     private RecyclerView listDinner;
@@ -54,6 +66,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
 
     public interface HomeFragmentListener {
         void onBtnAddBreakfastPressed();
+
         void onBtnDatePickerPressed();
     }
 
@@ -97,6 +110,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
 
         btnAddBreakfast = view.findViewById(R.id.btnAddBreakfast);
         btnAddBreakfast.setOnClickListener(this);
+
+        tvCalEaten = view.findViewById(R.id.tvCalEaten);
+        tvFatEaten = view.findViewById(R.id.tvFatEaten);
+        tvCarbsEaten = view.findViewById(R.id.tvCarbsEaten);
+        tvProteinEaten = view.findViewById(R.id.tvProteinEaten);
+
+        linearLayoutBreakfast = view.findViewById(R.id.linearLayoutBreakfast);
+        linearLayoutLunch = view.findViewById(R.id.linearLayoutLunch);
+        linearLayoutDinner = view.findViewById(R.id.linearLayoutDinner);
+        linearLayoutSnack = view.findViewById(R.id.linearLayoutSnack);
 
         listBreakfast = view.findViewById(R.id.listBreakfast);
         listLunch = view.findViewById(R.id.listLunch);
@@ -148,9 +171,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         List<FoodEntryWithFood> dataLunch = new ArrayList<>();
         List<FoodEntryWithFood> dataDinner = new ArrayList<>();
         List<FoodEntryWithFood> dataSnack = new ArrayList<>();
+        int totalCalEaten = 0;
+        float totalFatEaten = 0;
+        float totalCarbsEaten = 0;
+        float totalProteinEaten = 0;
 
         for (FoodEntryWithFood f : foodEntryWithFoodList) {
-            switch (f.getFoodEntry().getMeal()) {
+            FoodEntry foodEntry = f.getFoodEntry();
+            Food food = f.getFood();
+
+            switch (foodEntry.getMeal()) {
                 case "Breakfast":
                     dataBreakfast.add(f);
                     break;
@@ -167,6 +197,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
                     dataSnack.add(f);
                     break;
             }
+
+            float amount = foodEntry.getAmount();
+            totalCalEaten += amount * food.getCalories();
+            totalFatEaten += amount * food.getFat();
+            totalCarbsEaten += amount * food.getCarbohydrates();
+            totalProteinEaten += amount * food.getProtein();
         }
 
         adapterBreakfast.setData(dataBreakfast);
@@ -178,8 +214,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         adapterLunch.notifyDataSetChanged();
         adapterDinner.notifyDataSetChanged();
         adapterSnack.notifyDataSetChanged();
-    }
 
+        if (dataBreakfast.size() > 0) {
+            linearLayoutBreakfast.setVisibility(View.VISIBLE);
+        } else {
+            linearLayoutBreakfast.setVisibility(View.GONE);
+        }
+
+        if (dataLunch.size() > 0) {
+            linearLayoutLunch.setVisibility(View.VISIBLE);
+        } else {
+            linearLayoutLunch.setVisibility(View.GONE);
+        }
+
+        if (dataDinner.size() > 0) {
+            linearLayoutDinner.setVisibility(View.VISIBLE);
+        } else {
+            linearLayoutDinner.setVisibility(View.GONE);
+        }
+
+        if (dataSnack.size() > 0) {
+            linearLayoutSnack.setVisibility(View.VISIBLE);
+        } else {
+            linearLayoutSnack.setVisibility(View.GONE);
+        }
+
+        DecimalFormat formatter = new DecimalFormat("####.##");
+
+        tvCalEaten.setText(formatter.format(totalCalEaten));
+        tvFatEaten.setText(formatter.format(totalFatEaten) + " g");
+        tvCarbsEaten.setText(formatter.format(totalCarbsEaten) + " g");
+        tvProteinEaten.setText(formatter.format(totalProteinEaten) + " g");
+    }
 
     @Override
     public void onClick(View view) {
