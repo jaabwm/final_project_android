@@ -156,6 +156,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
 
     public void addTableRow(TableLayout tableLayout, final FoodEntry foodEntry, Food food) {
         DecimalFormat formatter = new DecimalFormat("####.##");
+        float amount = foodEntry.getAmount();
+        String name = food.getName();
+        String totalCalories = formatter.format(amount * food.getCalories());
+        String totalServingSize = formatter.format(amount * food.getServingSizeUnit()) + " " + food.getServingSizeMeasurement();
 
         TableRow tableRow1 = new TableRow(getActivity());
         tableRow1.setOnLongClickListener(new View.OnLongClickListener() {
@@ -174,7 +178,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         // Text params
         // Table row: TextView Name
         TextView textViewName = new TextView(getActivity()); // Add textview
-        textViewName.setText(food.getName());
+        textViewName.setText(name);
         textViewName.setTextSize(18);
         textViewName.setTextColor(Color.DKGRAY);
         textViewName.setGravity(Gravity.CENTER_VERTICAL);
@@ -184,7 +188,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
 
         // Table row: TextView Energy
         TextView textViewEnergy = new TextView(getActivity()); // Add textview
-        textViewEnergy.setText(String.valueOf(food.getCalories()));
+        textViewEnergy.setText(totalCalories);
         textViewEnergy.setTextSize(18);
         textViewEnergy.setTextColor(Color.DKGRAY);
         textViewEnergy.setGravity(Gravity.CENTER_VERTICAL);
@@ -197,7 +201,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         paramsSubLine.setMargins(4, 0, 0, 12); // Left, top, right, bottom
 
         TextView textViewSubLine = new TextView(getActivity()); // Add textview
-        textViewSubLine.setText(formatter.format(foodEntry.getAmount() * food.getServingSizeUnit()) + " " + food.getServingSizeMeasurement());
+        textViewSubLine.setText(totalServingSize);
         tableRow2.addView(textViewSubLine, paramsSubLine);
 
         // Add row to table
