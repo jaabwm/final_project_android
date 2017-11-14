@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.database.Food;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +44,15 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Food food = data.get(position);
 
-        holder.tvFoodName.setText(food.getName());
+        DecimalFormat formatter = new DecimalFormat("####.##");
+        // 100.77 g, 300 cal
+        String subline = formatter.format(food.getServingSizeUnit()) + " " +
+                        food.getServingSizeMeasurement() + ", " +
+                        food.getCalories() + " cal";
+
         holder.food = food;
+        holder.tvFoodName.setText(food.getName());
+        holder.tvSubline.setText(subline);
     }
 
     @Override
@@ -60,12 +68,14 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
 
         Food food;
         TextView tvFoodName;
+        TextView tvSubline;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(this);
             tvFoodName = itemView.findViewById(R.id.tvFoodName);
+            tvSubline = itemView.findViewById(R.id.tvSubline);
         }
 
         @Override
