@@ -100,7 +100,7 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_select_food, menu);
+        inflater.inflate(R.menu.menu_select_food, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

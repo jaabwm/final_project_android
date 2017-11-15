@@ -12,6 +12,7 @@ import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.fragment.AddFoodFragment;
+import com.jabwrb.nutridiary.fragment.ApiFoodFragment;
 import com.jabwrb.nutridiary.fragment.CreateFoodFragment;
 import com.jabwrb.nutridiary.fragment.DatePickerFragment;
 import com.jabwrb.nutridiary.fragment.HomeFragment;
@@ -70,6 +71,16 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.setTargetFragment(getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG), 0);
         newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    @Override
+    public void onMenuSearchPressed() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.fragmentContainer, new ApiFoodFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override

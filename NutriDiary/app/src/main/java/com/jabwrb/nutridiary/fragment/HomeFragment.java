@@ -7,9 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -68,6 +73,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         void onBtnAddBreakfastPressed();
 
         void onBtnDatePickerPressed();
+
+        void onMenuSearchPressed();
     }
 
     public HomeFragment() {
@@ -104,6 +111,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     }
 
     private void setup(View view) {
+        // Toolbar
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        activity.setSupportActionBar(toolbar);
+        setHasOptionsMenu(true);
+
         btnDatePicker = view.findViewById(R.id.btnDatePicker);
         btnDatePicker.setOnClickListener(this);
         setBtnDatePickerInfo(currentDate);
@@ -245,6 +258,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         tvFatEaten.setText(formatter.format(totalFatEaten) + " g");
         tvCarbsEaten.setText(formatter.format(totalCarbsEaten) + " g");
         tvProteinEaten.setText(formatter.format(totalProteinEaten) + " g");
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_home, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                listener.onMenuSearchPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
