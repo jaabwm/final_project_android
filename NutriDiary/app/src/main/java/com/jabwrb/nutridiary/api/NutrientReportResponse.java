@@ -1,7 +1,5 @@
 package com.jabwrb.nutridiary.api;
 
-import java.util.List;
-
 public class NutrientReportResponse {
 
     NutrientReport report;

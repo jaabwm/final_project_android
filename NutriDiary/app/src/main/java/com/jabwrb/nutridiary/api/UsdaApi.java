@@ -18,9 +18,13 @@ public interface UsdaApi {
     String ID_DIETARY_FIBER = "291";
     String ID_SUGARS = "269";
 
-    @GET("nutrients/")
+    @GET("nutrients/?format=JSON")
     Call<NutrientReportResponse> getNutrientReport(@Query("api_key") String api_key,
                                                    @Query("ndbno") String ndbno,
                                                    @Query("nutrients") String nutrient1,
                                                    @Query("nutrients") String nutrient2);
+
+    @GET("search/?format=JSON")
+    Call<SearchResponse> searchFood(@Query("api_key") String api_key,
+                                    @Query("q") String q);
 }
