@@ -20,6 +20,7 @@ import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
+import com.jabwrb.nutridiary.task.CountDuplicateFoodTask;
 import com.jabwrb.nutridiary.task.CreateFoodTask;
 
 /**
@@ -154,10 +155,19 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
             return;
         }
 
-        new CreateFoodTask(db, new CreateFoodTask.OnFoodCreateListener() {
+        new CountDuplicateFoodTask(db, new CountDuplicateFoodTask.OnDuplicateFoodCountListener() {
             @Override
-            public void onFoodCreated() {
-                listener.onBtnAddPressed();
+            public void onDuplicateFoodCounted(int count, Food food) {
+                if (count == 0) {
+                    new CreateFoodTask(db, new CreateFoodTask.OnFoodCreateListener() {
+                        @Override
+                        public void onFoodCreated() {
+                            listener.onBtnAddPressed();
+                        }
+                    }).execute(food);
+                } else {
+                    Toast.makeText(getActivity(), "Fail to create.\nAlready has this food.", Toast.LENGTH_SHORT).show();
+                }
             }
         }).execute(food);
     }
