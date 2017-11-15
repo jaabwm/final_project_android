@@ -4,7 +4,12 @@ package com.jabwrb.nutridiary.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -68,6 +73,12 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
     }
 
     private void setup(View view) {
+        // Toolbar
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        activity.setSupportActionBar(toolbar);
+        setHasOptionsMenu(true);
+
         etName = view.findViewById(R.id.etName);
         etBrand = view.findViewById(R.id.etBrand);
         etServingSizeUnit = view.findViewById(R.id.etServingSizeUnit);
@@ -83,6 +94,24 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
         etSugars = view.findViewById(R.id.etSugars);
         btnAdd = view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_create_food, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_create:
+                insertFoodToDb();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
