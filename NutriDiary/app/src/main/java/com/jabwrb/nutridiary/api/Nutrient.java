@@ -6,7 +6,7 @@ public class Nutrient {
     private String nutrient;
     private String unit;
     private String value;
-    private float gm;
+    private String gm;
 
     public String getNutrient_id() {
         return nutrient_id;
@@ -40,11 +40,11 @@ public class Nutrient {
         this.value = value;
     }
 
-    public float getGm() {
+    public String getGm() {
         return gm;
     }
 
-    public void setGm(float gm) {
+    public void setGm(String gm) {
         this.gm = gm;
     }
 }

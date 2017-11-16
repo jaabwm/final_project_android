@@ -26,7 +26,7 @@ import com.jabwrb.nutridiary.task.CreateFoodTask;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateFoodFragment extends Fragment implements View.OnClickListener {
+public class CreateFoodFragment extends Fragment {
 
     private NutriDiaryDb db;
     private CreateFoodFragmentListener listener;
@@ -43,7 +43,6 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
     private EditText etSodium;
     private EditText etDietaryFiber;
     private EditText etSugars;
-    private Button btnAdd;
 
     public interface CreateFoodFragmentListener {
         void onBtnAddPressed();
@@ -93,8 +92,6 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
         etSodium = view.findViewById(R.id.etSodium);
         etDietaryFiber = view.findViewById(R.id.etDietaryFiber);
         etSugars = view.findViewById(R.id.etSugars);
-        btnAdd = view.findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(this);
     }
 
     @Override
@@ -115,21 +112,8 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnAdd:
-                insertFoodToDb();
-                break;
-        }
-    }
-
     private void insertFoodToDb() {
-        if (etName.getText().toString().isEmpty() ||
-                etCalories.toString().isEmpty() ||
-                etServingSizeUnit.toString().isEmpty() ||
-                etServingSizeMeasurement.toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Please enter the required information.", Toast.LENGTH_LONG).show();
+        if (!validate()) {
             return;
         }
 
@@ -161,7 +145,7 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
                 if (count == 0) {
                     new CreateFoodTask(db, new CreateFoodTask.OnFoodCreateListener() {
                         @Override
-                        public void onFoodCreated() {
+                        public void onFoodCreated(Long id) {
                             listener.onBtnAddPressed();
                         }
                     }).execute(food);
@@ -170,6 +154,17 @@ public class CreateFoodFragment extends Fragment implements View.OnClickListener
                 }
             }
         }).execute(food);
+    }
+
+    private boolean validate() {
+        if (etName.getText().toString().isEmpty() ||
+                etCalories.getText().toString().isEmpty() ||
+                etServingSizeUnit.getText().toString().isEmpty() ||
+                etServingSizeMeasurement.getText().toString().isEmpty()) {
+            Toast.makeText(getActivity(), "Please enter the required information.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     private String emptyToZero(String num) {

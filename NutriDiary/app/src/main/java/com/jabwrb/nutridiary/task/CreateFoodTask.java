@@ -5,13 +5,13 @@ import android.os.AsyncTask;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
 
-public class CreateFoodTask extends AsyncTask<Food, Void, Void> {
+public class CreateFoodTask extends AsyncTask<Food, Void, Long> {
 
     private NutriDiaryDb db;
     private OnFoodCreateListener listener;
 
     public interface OnFoodCreateListener {
-        void onFoodCreated();
+        void onFoodCreated(Long id);
     }
 
     public CreateFoodTask(NutriDiaryDb db, OnFoodCreateListener listener) {
@@ -20,14 +20,12 @@ public class CreateFoodTask extends AsyncTask<Food, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Food... foods) {
-        db.foodDao().insert(foods[0]);
-
-        return null;
+    protected Long doInBackground(Food... foods) {
+        return db.foodDao().insert(foods[0]);
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        listener.onFoodCreated();
+    protected void onPostExecute(Long id) {
+        listener.onFoodCreated(id);
     }
 }

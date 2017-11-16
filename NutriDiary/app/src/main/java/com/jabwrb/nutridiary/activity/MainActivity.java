@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragmentContainer, new SelectFoodFragment())
+                .replace(R.id.fragmentContainer, new SelectFoodFragment(), SelectFoodFragment.TAG)
                 .addToBackStack(null)
                 .commit();
     }
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragmentContainer, new ApiFoodFragment())
+                .replace(R.id.fragmentContainer, new ApiFoodFragment(), ApiFoodFragment.TAG)
                 .addToBackStack(null)
                 .commit();
     }
@@ -94,13 +94,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
     @Override
-    public void onAddToDiaryPressed() {
+    public void onActionAddPressed() {
         getSupportFragmentManager().popBackStack();
         getSupportFragmentManager().popBackStack();
     }
 
     @Override
-    public void onBtnCreatePressed() {
+    public void onActionCreatePressed() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

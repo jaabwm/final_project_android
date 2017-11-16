@@ -1,5 +1,7 @@
 package com.jabwrb.nutridiary.api;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -18,13 +20,22 @@ public interface UsdaApi {
     String ID_DIETARY_FIBER = "291";
     String ID_SUGARS = "269";
 
-    @GET("nutrients/?format=JSON")
-    Call<NutrientReportResponse> getNutrientReport(@Query("api_key") String api_key,
-                                                   @Query("ndbno") String ndbno,
-                                                   @Query("nutrients") String nutrient1,
-                                                   @Query("nutrients") String nutrient2);
+    @GET("nutrients/?format=JSON" +
+            "&api_key=" + API_KEY +
+            "&nutrients=" + ID_CALORIES +
+            "&nutrients=" + ID_FAT +
+            "&nutrients=" + ID_CARBOHYDRATES +
+            "&nutrients=" + ID_PROTEIN +
+            "&nutrients=" + ID_SATURATED_FAT +
+            "&nutrients=" + ID_CHOLESTEROL +
+            "&nutrients=" + ID_SODIUM +
+            "&nutrients=" + ID_DIETARY_FIBER +
+            "&nutrients=" + ID_SUGARS)
+    Call<NutrientReportResponse> getNutrientReport(@Query("ndbno") String ndbno);
 
-    @GET("search/?format=JSON")
-    Call<SearchResponse> searchFood(@Query("api_key") String api_key,
-                                    @Query("q") String q);
+    @GET("search/?format=JSON" +
+            "&api_key=" + API_KEY +
+            "&sort=n" +
+            "&max=50")
+    Call<SearchResponse> searchFood(@Query("q") String q);
 }

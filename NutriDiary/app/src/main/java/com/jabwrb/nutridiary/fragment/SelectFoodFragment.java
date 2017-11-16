@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
@@ -28,16 +27,16 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SelectFoodFragment extends Fragment implements View.OnClickListener {
+public class SelectFoodFragment extends Fragment {
 
+    public static final String TAG = SelectFoodFragment.class.getSimpleName();
     private NutriDiaryDb db;
     private SelectFoodFragmentListener listener;
-    private Button btnCreate;
     private RecyclerView recyclerView;
-    private FoodRecyclerViewAdapter foodRecyclerViewAdapter;
+    private FoodRecyclerViewAdapter adapter;
 
     public interface SelectFoodFragmentListener {
-        void onBtnCreatePressed();
+        void onActionCreatePressed();
     }
 
     public SelectFoodFragment() {
@@ -52,7 +51,7 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
 
         listener = (SelectFoodFragmentListener) getActivity();
 
-        foodRecyclerViewAdapter = new FoodRecyclerViewAdapter(getActivity());
+        adapter = new FoodRecyclerViewAdapter(getActivity());
 
         queryFoods();
     }
@@ -61,8 +60,8 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
         new LoadMyFoodTask(db, new LoadMyFoodTask.OnFoodLoadListener() {
             @Override
             public void onFoodLoaded(List<Food> foods) {
-                foodRecyclerViewAdapter.setData(foods);
-                foodRecyclerViewAdapter.notifyDataSetChanged();
+                adapter.setData(foods);
+                adapter.notifyDataSetChanged();
             }
         }).execute();
     }
@@ -86,16 +85,8 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
         setHasOptionsMenu(true);
 
         recyclerView = view.findViewById(R.id.listFood);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
-        recyclerView.setAdapter(foodRecyclerViewAdapter);
-
-        btnCreate = view.findViewById(R.id.btnCreate);
-        btnCreate.setOnClickListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -108,20 +99,11 @@ public class SelectFoodFragment extends Fragment implements View.OnClickListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                listener.onBtnCreatePressed();
+                listener.onActionCreatePressed();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnCreate:
-                listener.onBtnCreatePressed();
-                break;
         }
     }
 }

@@ -14,20 +14,20 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+            style="@style/MyToolbarStyle"
             app:title="Search for Foods" />
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/text"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
+        android:visibility="gone" />
 
-    <SearchView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listFood"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></SearchView>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

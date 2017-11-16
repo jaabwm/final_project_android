@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +51,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     private NutriDiaryDb db;
     private HomeFragmentListener listener;
     private Button btnDatePicker;
-    private Button btnAddBreakfast;
+    private FloatingActionButton fabAddEntry;
     private TextView tvCalEaten;
     private TextView tvFatEaten;
     private TextView tvCarbsEaten;
@@ -121,8 +122,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         btnDatePicker.setOnClickListener(this);
         setBtnDatePickerInfo(currentDate);
 
-        btnAddBreakfast = view.findViewById(R.id.btnAddBreakfast);
-        btnAddBreakfast.setOnClickListener(this);
+        fabAddEntry = view.findViewById(R.id.fabAddEntry);
+        fabAddEntry.setOnClickListener(this);
 
         tvCalEaten = view.findViewById(R.id.tvCalEaten);
         tvFatEaten = view.findViewById(R.id.tvFatEaten);
@@ -138,6 +139,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         listLunch = view.findViewById(R.id.listLunch);
         listDinner = view.findViewById(R.id.listDinner);
         listSnack = view.findViewById(R.id.listSnack);
+
+        listBreakfast.setNestedScrollingEnabled(false);
+        listLunch.setNestedScrollingEnabled(false);
+        listDinner.setNestedScrollingEnabled(false);
+        listSnack.setNestedScrollingEnabled(false);
 
         listBreakfast.setLayoutManager(new LinearLayoutManager(getActivity()) {
             @Override
@@ -281,12 +287,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnAddBreakfast:
-                listener.onBtnAddBreakfastPressed();
-                break;
-
             case R.id.btnDatePicker:
                 listener.onBtnDatePickerPressed();
+                break;
+
+            case R.id.fabAddEntry:
+                listener.onBtnAddBreakfastPressed();
                 break;
         }
     }

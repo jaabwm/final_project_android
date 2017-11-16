@@ -4,9 +4,14 @@ package com.jabwrb.nutridiary.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,14 +28,15 @@ import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.FoodEntry;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
 import com.jabwrb.nutridiary.task.AddToDiaryTask;
+import com.jabwrb.nutridiary.task.CreateFoodTask;
+import com.jabwrb.nutridiary.task.GetDuplicateFoodIdTask;
 
 import java.text.DecimalFormat;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddFoodFragment extends Fragment implements View.OnClickListener {
+public class AddFoodFragment extends Fragment {
 
     public static final String KEY_FOOD = "food";
     private NutriDiaryDb db;
@@ -49,11 +55,10 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
     private TextView tvDietaryFiber;
     private TextView tvSugars;
     private TextView tvProtein;
-    private Button btnAddToDiary;
     private TextView tvBrand;
 
     public interface AddFoodFragmentListener {
-        void onAddToDiaryPressed();
+        void onActionAddPressed();
     }
 
     public AddFoodFragment() {
@@ -92,10 +97,17 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setup(View view) {
+        // Toolbar
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        activity.setSupportActionBar(toolbar);
+        setHasOptionsMenu(true);
+
         etAmount = view.findViewById(R.id.etAmount);
         etAmount.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -105,7 +117,8 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
@@ -126,13 +139,15 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
         tvSugars = view.findViewById(R.id.tvSugars);
         tvProtein = view.findViewById(R.id.tvProtein);
 
-        tvBrand.setText(food.getBrand());
+        String brand = food.getBrand();
+        if (brand.isEmpty()) {
+            tvBrand.setVisibility(View.GONE);
+        } else {
+            tvBrand.setText(food.getBrand());
+        }
         tvFoodName.setText(food.getName());
         tvServingSize.setText(food.getServingSizeUnit() + " " + food.getServingSizeMeasurement());
         setNutrientDetails();
-
-        btnAddToDiary =  view.findViewById(R.id.btnAddToDiary);
-        btnAddToDiary.setOnClickListener(this);
     }
 
     private void setNutrientDetails() {
@@ -141,8 +156,8 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
 
         tvCalories.setText(formatter.format(Math.round(food.getCalories() * amount)));
         tvTotalFat.setText(formatter.format(food.getFat() * amount) + " g");
-        tvSaturatedFat.setText(formatter.format(food.getSaturatedFat() * amount)  + " mg");
-        tvChoresterol.setText(formatter.format(food.getCholesterol() * amount)  + " mg");
+        tvSaturatedFat.setText(formatter.format(food.getSaturatedFat() * amount) + " mg");
+        tvChoresterol.setText(formatter.format(food.getCholesterol() * amount) + " mg");
         tvSodium.setText(formatter.format(food.getSodium() * amount) + " g");
         tvTotalCarbohydrates.setText(formatter.format(food.getCarbohydrates() * amount) + " g");
         tvDietaryFiber.setText(formatter.format(food.getDietaryFiber() * amount) + " g");
@@ -151,30 +166,75 @@ public class AddFoodFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnAddToDiary:
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_add_food, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
                 onAddToDiary();
-                break;
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
     private void onAddToDiary() {
+        if (!validate()) {
+            return;
+        }
+
+        new GetDuplicateFoodIdTask(db, new GetDuplicateFoodIdTask.GetDuplicateFoodIdListener() {
+            @Override
+            public void OnDuplicateFoodIdGot(int id, Food food) {
+                if (id == 0) {
+                    // Not duplicate, create new food.
+                    createFood(food);
+                } else {
+                    // Duplicate, normally add food entry.
+                    addFoodEntry(food.getId());
+                }
+            }
+        }).execute(food);
+    }
+
+    private boolean validate() {
+        if (etAmount.getText().toString().isEmpty()) {
+            Toast.makeText(getActivity(), "Please enter amount.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void createFood(Food food) {
+        new CreateFoodTask(db, new CreateFoodTask.OnFoodCreateListener() {
+            @Override
+            public void onFoodCreated(Long id) {
+                addFoodEntry(id.intValue());
+            }
+        }).execute(food);
+    }
+
+    private void addFoodEntry(int foodId) {
         FoodEntry foodEntry = new FoodEntry();
-        foodEntry.setFoodId(food.getId());
+        foodEntry.setFoodId(foodId);
         try {
             foodEntry.setAmount(Float.parseFloat(etAmount.getText().toString()));
         } catch (NumberFormatException e) {
-            Toast.makeText(getActivity(), "Please enter amount.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Invalid number format entered.", Toast.LENGTH_SHORT).show();
+            return;
         }
         foodEntry.setMeal(spinner.getSelectedItem().toString());
-        HomeFragment fragment = (HomeFragment) getFragmentManager().findFragmentByTag(HomeFragment.TAG);
         foodEntry.setDate(((MainActivity) getActivity()).getCurrentDate());
 
         new AddToDiaryTask(db, new AddToDiaryTask.OnFoodAddListener() {
             @Override
             public void onFoodAdded() {
-                listener.onAddToDiaryPressed();
+                listener.onActionAddPressed();
             }
         }).execute(foodEntry);
     }

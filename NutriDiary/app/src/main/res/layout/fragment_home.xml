@@ -11,15 +11,13 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            style="@style/MyToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
             app:title="@string/app_name" />
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
@@ -36,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@android:color/transparent"
+                android:background="?attr/selectableItemBackground"
                 android:drawablePadding="8dp"
                 android:text="DATE" />
 
@@ -45,48 +43,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <TextView
-                        android:id="@+id/tvCalEaten"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="0"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/black"
-                        android:textSize="24sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Calories"
-                        android:textAlignment="center"
-                        android:textSize="24sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/white"
+                android:background="@drawable/shadow_box"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvCalEaten"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorPrimaryDark"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Calories"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -94,6 +77,7 @@
                         android:layout_weight="1"
                         android:text="Fat"
                         android:textAlignment="center"
+                        android:textColor="#ff9800"
                         android:textSize="16sp" />
 
                     <TextView
@@ -102,6 +86,7 @@
                         android:layout_weight="1"
                         android:text="Carbs"
                         android:textAlignment="center"
+                        android:textColor="#00bcd4"
                         android:textSize="16sp" />
 
                     <TextView
@@ -110,6 +95,7 @@
                         android:layout_weight="1"
                         android:text="Protein"
                         android:textAlignment="center"
+                        android:textColor="#e91e63"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -124,7 +110,7 @@
                         android:layout_weight="1"
                         android:text="0 g"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black"
+                        android:textColor="#c66900"
                         android:textSize="16sp" />
 
                     <TextView
@@ -134,7 +120,7 @@
                         android:layout_weight="1"
                         android:text="0 g"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black"
+                        android:textColor="#008ba3"
                         android:textSize="16sp" />
 
                     <TextView
@@ -144,15 +130,10 @@
                         android:layout_weight="1"
                         android:text="0 g"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black"
+                        android:textColor="#b0003a"
                         android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
 
             <!-- Breakfast -->
             <LinearLayout
@@ -160,43 +141,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@android:color/white"
+                android:background="@drawable/shadow_box2"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
+                        style="@style/Header"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="Breakfast"
-                        android:textSize="20sp" />
+                        android:text="Breakfast" />
 
                     <TextView
+                        style="@style/Header"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Calories"
-                        android:textSize="20sp" />
+                        android:text="Calories" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/black" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/listBreakfast"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_margin="8dp" />
             </LinearLayout>
 
             <!-- Lunch -->
@@ -205,43 +183,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@android:color/white"
+                android:background="@drawable/shadow_box2"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
+                        style="@style/Header"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="Lunch"
-                        android:textSize="20sp" />
+                        android:text="Lunch" />
 
                     <TextView
+                        style="@style/Header"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Calories"
-                        android:textSize="20sp" />
+                        android:text="Calories" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/black" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/listLunch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_margin="8dp" />
             </LinearLayout>
 
             <!-- Dinner -->
@@ -250,43 +225,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@android:color/white"
+                android:background="@drawable/shadow_box2"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
+                        style="@style/Header"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="Dinner"
-                        android:textSize="20sp" />
+                        android:text="Dinner" />
 
                     <TextView
+                        style="@style/Header"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Calories"
-                        android:textSize="20sp" />
+                        android:text="Calories" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/black" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/listDinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_margin="8dp" />
             </LinearLayout>
 
             <!-- Snack -->
@@ -295,60 +267,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@android:color/white"
+                android:background="@drawable/shadow_box2"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
+                        style="@style/Header"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="Snack"
-                        android:textSize="20sp" />
+                        android:text="Snack" />
 
                     <TextView
+                        style="@style/Header"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Calories"
-                        android:textSize="20sp" />
+                        android:text="Calories" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/black" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/listSnack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_margin="8dp" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="16dp" />
+                android:layout_height="100dp" />
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
-    <Button
-        android:id="@+id/btnAddBreakfast"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:text="add breakfast"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>
