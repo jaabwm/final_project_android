@@ -140,7 +140,7 @@ public class AddFoodFragment extends Fragment {
         tvProtein = view.findViewById(R.id.tvProtein);
 
         String brand = food.getBrand();
-        if (brand.isEmpty()) {
+        if (brand == null || brand.isEmpty()) {
             tvBrand.setVisibility(View.GONE);
         } else {
             tvBrand.setText(food.getBrand());
