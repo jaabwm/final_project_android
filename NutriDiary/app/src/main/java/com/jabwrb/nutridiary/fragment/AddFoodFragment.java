@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -218,6 +217,8 @@ public class AddFoodFragment extends Fragment {
             }
         }).execute(food);
     }
+
+
 
     private void addFoodEntry(int foodId) {
         FoodEntry foodEntry = new FoodEntry();

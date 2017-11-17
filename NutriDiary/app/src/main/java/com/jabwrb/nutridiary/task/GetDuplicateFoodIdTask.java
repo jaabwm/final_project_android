@@ -24,7 +24,7 @@ public class GetDuplicateFoodIdTask extends AsyncTask<Food, Void, Integer> {
     protected Integer doInBackground(Food... foods) {
         this.food = foods[0];
 
-        return db.foodDao().countDuplicateRows(food.getName(), food.getBrand());
+        return db.foodDao().getDuplicateFoodId(food.getName(), food.getBrand());
     }
 
     @Override

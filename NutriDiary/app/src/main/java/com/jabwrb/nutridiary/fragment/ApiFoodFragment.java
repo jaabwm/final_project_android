@@ -12,20 +12,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
-import com.jabwrb.nutridiary.api.Food;
+import com.jabwrb.nutridiary.api.FoodUsda;
 import com.jabwrb.nutridiary.api.Item;
 import com.jabwrb.nutridiary.api.Nutrient;
 import com.jabwrb.nutridiary.api.NutrientReportResponse;
 import com.jabwrb.nutridiary.api.SearchResponse;
 import com.jabwrb.nutridiary.api.SearchResult;
 import com.jabwrb.nutridiary.api.UsdaApi;
+import com.jabwrb.nutridiary.database.Food;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +47,14 @@ public class ApiFoodFragment extends Fragment {
     public static final String TAG = ApiFoodFragment.class.getSimpleName();
     private OkHttpClient client;
     private Retrofit retrofit;
+    private boolean isLoading;
+    private int rows;
     private UsdaApi api;
     private ProgressBar progressBar;
+    private TextView tvNotFound;
     private RecyclerView recyclerView;
     private FoodRecyclerViewAdapter adapter;
-    private List<com.jabwrb.nutridiary.database.Food> data;
+    private List<Food> data;
 
     public ApiFoodFragment() {
         // Required empty public constructor
@@ -84,6 +89,8 @@ public class ApiFoodFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progressBar);
 
+        tvNotFound = view.findViewById(R.id.tvNotFound);
+
         recyclerView = view.findViewById(R.id.listFood);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -113,11 +120,14 @@ public class ApiFoodFragment extends Fragment {
     }
 
     private void configSearchView(Menu menu) {
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-
+        MenuItem itemSearch = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) itemSearch.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (isLoading) {
+                    client.dispatcher().cancelAll();
+                }
                 getSearchResult(query);
                 return false;
             }
@@ -127,10 +137,16 @@ public class ApiFoodFragment extends Fragment {
                 return false;
             }
         });
+
+        itemSearch.expandActionView();
     }
 
     private void getSearchResult(String query) {
+        isLoading = true;
+
+        clearRecyclerViewData();
         progressBar.setVisibility(View.VISIBLE);
+        tvNotFound.setVisibility(View.GONE);
 
         Call<SearchResponse> call = api.searchFood(query);
         System.out.println("search url: " + call.request().url().toString());
@@ -141,16 +157,16 @@ public class ApiFoodFragment extends Fragment {
                     SearchResult searchResult = response.body().getList();
 
                     if (searchResult == null) {
-                        Toast.makeText(getActivity(), "Food not found.", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                        tvNotFound.setVisibility(View.VISIBLE);
                         return;
                     }
 
-                    data.clear();
                     List<Item> items = searchResult.getItem();
-                    int rows = items.size();
+                    rows = items.size();
 
                     for (Item i : items) {
-                        getNutrientReport(i.getNdbno(), rows);
+                        getNutrientReport(i.getNdbno());
                     }
                 }
             }
@@ -162,20 +178,45 @@ public class ApiFoodFragment extends Fragment {
         });
     }
 
-    private void getNutrientReport(String ndbno, final int rows) {
+    private void clearRecyclerViewData() {
+        data.clear();
+        setNewData();
+    }
+
+    private void addRecyclerViewData(Food food) {
+        data.add(food);
+        setNewData();
+    }
+
+    private void setNewData() {
+        adapter.setData(data);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void getNutrientReport(String ndbno) {
         Call<NutrientReportResponse> call = api.getNutrientReport(ndbno);
         System.out.println("nutrient url: " + call.request().url().toString());
         call.enqueue(new Callback<NutrientReportResponse>() {
             @Override
             public void onResponse(Call<NutrientReportResponse> call, Response<NutrientReportResponse> response) {
                 if (response.isSuccessful()) {
-                    Food foodApi = response.body().getReport().getFoods().get(0);
-                    List<Nutrient> nutrients = foodApi.getNutrients();
+                    List<FoodUsda> foodUsdaList = response.body().getReport().getFoods();
+                    FoodUsda foodUsda;
 
-                    com.jabwrb.nutridiary.database.Food foodDb = new com.jabwrb.nutridiary.database.Food();
-                    foodDb.setName(foodApi.getName());
-                    foodDb.setServingSizeUnit(100);
-                    foodDb.setServingSizeMeasurement("g");
+                    if (foodUsdaList.size() == 0) {
+                        rows--;
+                        return;
+                    } else {
+                        foodUsda = foodUsdaList.get(0);
+                    }
+
+                    List<Nutrient> nutrients = foodUsda.getNutrients();
+
+                    Food food = new Food();
+                    food.setName(foodUsda.getName());
+                    food.setBrand("");
+                    food.setServingSizeUnit(100);
+                    food.setServingSizeMeasurement("g");
 
                     for (Nutrient n : nutrients) {
                         float gram;
@@ -187,49 +228,48 @@ public class ApiFoodFragment extends Fragment {
 
                         switch (n.getNutrient_id()) {
                             case UsdaApi.ID_CALORIES:
-                                foodDb.setCalories((int) gram);
+                                food.setCalories((int) gram);
                                 break;
 
                             case UsdaApi.ID_FAT:
-                                foodDb.setFat(gram);
+                                food.setFat(gram);
                                 break;
 
                             case UsdaApi.ID_CARBOHYDRATES:
-                                foodDb.setCarbohydrates(gram);
+                                food.setCarbohydrates(gram);
                                 break;
 
                             case UsdaApi.ID_PROTEIN:
-                                foodDb.setProtein(gram);
+                                food.setProtein(gram);
                                 break;
 
                             case UsdaApi.ID_SATURATED_FAT:
-                                foodDb.setSaturatedFat(gram);
+                                food.setSaturatedFat(gram);
                                 break;
 
                             case UsdaApi.ID_CHOLESTEROL:
-                                foodDb.setCholesterol(gram);
+                                food.setCholesterol(gram);
                                 break;
 
                             case UsdaApi.ID_SODIUM:
-                                foodDb.setSodium(gram);
+                                food.setSodium(gram);
                                 break;
 
                             case UsdaApi.ID_DIETARY_FIBER:
-                                foodDb.setDietaryFiber(gram);
+                                food.setDietaryFiber(gram);
                                 break;
 
                             case UsdaApi.ID_SUGARS:
-                                foodDb.setSugars(gram);
+                                food.setSugars(gram);
                                 break;
                         }
                     }
 
-                    data.add(foodDb);
-                    adapter.setData(data);
-                    adapter.notifyDataSetChanged();
+                    addRecyclerViewData(food);
 
                     if (data.size() == rows) {
                         progressBar.setVisibility(View.GONE);
+                        isLoading = false;
                     }
                 }
             }

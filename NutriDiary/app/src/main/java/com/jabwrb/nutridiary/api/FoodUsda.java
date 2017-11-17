@@ -2,7 +2,7 @@ package com.jabwrb.nutridiary.api;
 
 import java.util.List;
 
-public class Food {
+public class FoodUsda {
 
     private String ndbno;
     private String name;

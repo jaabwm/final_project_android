@@ -10,7 +10,7 @@ public class NutrientReport {
     private int end;
     private int start;
     private int total;
-    private List<Food> foods;
+    private List<FoodUsda> foods;
 
     public String getSr() {
         return sr;
@@ -60,11 +60,11 @@ public class NutrientReport {
         this.total = total;
     }
 
-    public List<Food> getFoods() {
+    public List<FoodUsda> getFoods() {
         return foods;
     }
 
-    public void setFoods(List<Food> foods) {
+    public void setFoods(List<FoodUsda> foods) {
         this.foods = foods;
     }
 }

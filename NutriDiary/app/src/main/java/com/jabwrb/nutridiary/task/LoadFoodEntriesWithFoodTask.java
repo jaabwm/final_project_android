@@ -58,7 +58,7 @@ public class LoadFoodEntriesWithFoodTask extends AsyncTask<Date, Void, List<Food
                     fe.getId(), fe.getFoodId(), fe.getMeal(), fe.getDate().toString());
 
             for (Food f : fs) {
-                System.out.printf("Food no.%d details (name: %s, brand: %s, cal: %d, fat: %f, carb: %f, protein: %f)\n\n",
+                System.out.printf("FoodUsda no.%d details (name: %s, brand: %s, cal: %d, fat: %f, carb: %f, protein: %f)\n\n",
                         f.getId(), f.getName(), f.getBrand(), f.getCalories(), f.getFat(), f.getCarbohydrates(), f.getProtein());
             }
         }
