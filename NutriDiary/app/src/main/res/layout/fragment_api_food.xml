@@ -27,12 +27,12 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/tvNotFound"
+        android:id="@+id/tvError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:text="@string/no_food_found"
+        android:text="Error message"
         android:textSize="20sp"
         android:visibility="gone" />
 

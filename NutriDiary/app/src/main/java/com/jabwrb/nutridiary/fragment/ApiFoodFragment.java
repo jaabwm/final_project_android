@@ -51,7 +51,7 @@ public class ApiFoodFragment extends Fragment {
     private int rows;
     private UsdaApi api;
     private ProgressBar progressBar;
-    private TextView tvNotFound;
+    private TextView tvError;
     private RecyclerView recyclerView;
     private FoodRecyclerViewAdapter adapter;
     private List<Food> data;
@@ -89,7 +89,7 @@ public class ApiFoodFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progressBar);
 
-        tvNotFound = view.findViewById(R.id.tvNotFound);
+        tvError = view.findViewById(R.id.tvError);
 
         recyclerView = view.findViewById(R.id.listFood);
         recyclerView.setNestedScrollingEnabled(false);
@@ -146,7 +146,7 @@ public class ApiFoodFragment extends Fragment {
 
         clearRecyclerViewData();
         progressBar.setVisibility(View.VISIBLE);
-        tvNotFound.setVisibility(View.GONE);
+        tvError.setVisibility(View.GONE);
 
         Call<SearchResponse> call = api.searchFood(query);
         System.out.println("search url: " + call.request().url().toString());
@@ -158,7 +158,8 @@ public class ApiFoodFragment extends Fragment {
 
                     if (searchResult == null) {
                         progressBar.setVisibility(View.GONE);
-                        tvNotFound.setVisibility(View.VISIBLE);
+                        tvError.setText(getResources().getString(R.string.no_food_found));
+                        tvError.setVisibility(View.VISIBLE);
                         return;
                     }
 
@@ -168,6 +169,10 @@ public class ApiFoodFragment extends Fragment {
                     for (Item i : items) {
                         getNutrientReport(i.getNdbno());
                     }
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    tvError.setText(getResources().getString(R.string.request_failed));
+                    tvError.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -266,11 +271,13 @@ public class ApiFoodFragment extends Fragment {
                     }
 
                     addRecyclerViewData(food);
+                } else {
+                    rows--;
+                }
 
-                    if (data.size() == rows) {
-                        progressBar.setVisibility(View.GONE);
-                        isLoading = false;
-                    }
+                if (data.size() == rows) {
+                    progressBar.setVisibility(View.GONE);
+                    isLoading = false;
                 }
             }
 

@@ -7,6 +7,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="no_food_found">No food found :(</string>
+    <string name="request_failed">Request failed :(</string>
     <string name="meal">Meal</string>
     <string name="number_of_servings">Number of Servings</string>
     <string name="serving_size">Serving Size</string>
