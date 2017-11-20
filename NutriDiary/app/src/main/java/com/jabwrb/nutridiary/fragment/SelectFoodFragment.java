@@ -56,7 +56,7 @@ public class SelectFoodFragment extends Fragment {
         queryFoods();
     }
 
-    private void queryFoods() {
+    public void queryFoods() {
         new LoadMyFoodTask(db, new LoadMyFoodTask.OnFoodLoadListener() {
             @Override
             public void onFoodLoaded(List<Food> foods) {

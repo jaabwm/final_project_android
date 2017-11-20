@@ -21,14 +21,23 @@ import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.NutriDiaryDb;
 import com.jabwrb.nutridiary.task.CountDuplicateFoodTask;
 import com.jabwrb.nutridiary.task.CreateFoodTask;
+import com.jabwrb.nutridiary.task.UpdateFoodTask;
+
+import java.text.DecimalFormat;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CreateFoodFragment extends Fragment {
 
+    public static final String KEY_FOOD = "food";
+    public static final String KEY_ACTION = "action";
+    public static final int ACTION_INSERT = 1;
+    public static final int ACTION_UPDATE = 2;
     private NutriDiaryDb db;
     private CreateFoodFragmentListener listener;
+    private Food food;
+    private int action;
     private EditText etName;
     private EditText etBrand;
     private EditText etServingSizeUnit;
@@ -44,16 +53,32 @@ public class CreateFoodFragment extends Fragment {
     private EditText etSugars;
 
     public interface CreateFoodFragmentListener {
-        void onBtnAddPressed();
+        void onMenuConfirmPressed();
+
+        void onUpdated();
     }
 
     public CreateFoodFragment() {
         // Required empty public constructor
     }
 
+    public CreateFoodFragment newInstance(Food food, int action) {
+        Bundle args = new Bundle();
+        args.putParcelable(KEY_FOOD, food);
+        args.putInt(KEY_ACTION, action);
+        CreateFoodFragment fragment = new CreateFoodFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        food = getArguments().getParcelable(KEY_FOOD);
+
+        action = getArguments().getInt(KEY_ACTION);
 
         db = DatabaseSingleton.getDatabaseInstance().getDb();
 
@@ -91,6 +116,28 @@ public class CreateFoodFragment extends Fragment {
         etSodium = view.findViewById(R.id.etSodium);
         etDietaryFiber = view.findViewById(R.id.etDietaryFiber);
         etSugars = view.findViewById(R.id.etSugars);
+
+        if (action == ACTION_UPDATE) {
+            setFoodDetails();
+        }
+    }
+
+    private void setFoodDetails() {
+        DecimalFormat formatter = new DecimalFormat("####.##");
+
+        etName.setText(food.getName());
+        etBrand.setText(food.getBrand());
+        etServingSizeUnit.setText(formatter.format(food.getServingSizeUnit()));
+        etServingSizeMeasurement.setText(food.getServingSizeMeasurement());
+        etCalories.setText(formatter.format(food.getCalories()));
+        etFat.setText(formatter.format(food.getFat()));
+        etCarbohydrates.setText(formatter.format(food.getCarbohydrates()));
+        etProtein.setText(formatter.format(food.getProtein()));
+        etSaturatedFat.setText(formatter.format(food.getSaturatedFat()));
+        etChoresterol.setText(formatter.format(food.getCholesterol()));
+        etSodium.setText(formatter.format(food.getSodium()));
+        etDietaryFiber.setText(formatter.format(food.getDietaryFiber()));
+        etSugars.setText(formatter.format(food.getSugars()));
     }
 
     @Override
@@ -102,12 +149,24 @@ public class CreateFoodFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_create:
-                insertFoodToDb();
+            case R.id.action_confirm:
+                onActionConfirm();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onActionConfirm() {
+        switch (action) {
+            case ACTION_INSERT:
+                insertFoodToDb();
+                break;
+
+            case ACTION_UPDATE:
+                updateFood();
+                break;
         }
     }
 
@@ -116,27 +175,7 @@ public class CreateFoodFragment extends Fragment {
             return;
         }
 
-        Food food = new Food();
-        food.setName(etName.getText().toString());
-        food.setBrand(etBrand.getText().toString());
-        food.setServingSizeMeasurement(etServingSizeMeasurement.getText().toString());
-        try {
-            food.setCalories(Integer.parseInt(emptyToZero(etCalories.getText().toString())));
-            food.setServingSizeUnit(Integer.parseInt(emptyToZero(etServingSizeUnit.getText().toString())));
-            food.setCalories(Integer.parseInt(emptyToZero(etCalories.getText().toString())));
-            food.setFat(Float.parseFloat(emptyToZero(etFat.getText().toString())));
-            food.setCarbohydrates(Float.parseFloat(emptyToZero(etCarbohydrates.getText().toString())));
-            food.setProtein(Float.parseFloat(emptyToZero(etProtein.getText().toString())));
-            food.setSaturatedFat(Float.parseFloat(emptyToZero(etSaturatedFat.getText().toString())));
-            food.setCholesterol(Float.parseFloat(emptyToZero(etChoresterol.getText().toString())));
-            food.setSodium(Float.parseFloat(emptyToZero(etSodium.getText().toString())));
-            food.setDietaryFiber(Float.parseFloat(emptyToZero(etDietaryFiber.getText().toString())));
-            food.setSugars(Float.parseFloat(emptyToZero(etSugars.getText().toString())));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Invalid number format entered.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        setFoodAttr();
 
         new CountDuplicateFoodTask(db, new CountDuplicateFoodTask.OnDuplicateFoodCountListener() {
             @Override
@@ -145,12 +184,27 @@ public class CreateFoodFragment extends Fragment {
                     new CreateFoodTask(db, new CreateFoodTask.OnFoodCreateListener() {
                         @Override
                         public void onFoodCreated(Long id) {
-                            listener.onBtnAddPressed();
+                            listener.onMenuConfirmPressed();
                         }
                     }).execute(food);
                 } else {
                     Toast.makeText(getActivity(), "Fail to create.\nAlready has this food.", Toast.LENGTH_SHORT).show();
                 }
+            }
+        }).execute(food);
+    }
+
+    private void updateFood() {
+        if (!validate()) {
+            return;
+        }
+
+        setFoodAttr();
+
+        new UpdateFoodTask(db, new UpdateFoodTask.OnFoodUpdateListener() {
+            @Override
+            public void onFoodUpdated() {
+                listener.onUpdated();
             }
         }).execute(food);
     }
@@ -164,6 +218,23 @@ public class CreateFoodFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    private void setFoodAttr() {
+        food.setName(etName.getText().toString());
+        food.setBrand(etBrand.getText().toString());
+        food.setServingSizeMeasurement(etServingSizeMeasurement.getText().toString());
+        food.setCalories(Integer.parseInt(emptyToZero(etCalories.getText().toString())));
+        food.setServingSizeUnit(Integer.parseInt(emptyToZero(etServingSizeUnit.getText().toString())));
+        food.setCalories(Integer.parseInt(emptyToZero(etCalories.getText().toString())));
+        food.setFat(Float.parseFloat(emptyToZero(etFat.getText().toString())));
+        food.setCarbohydrates(Float.parseFloat(emptyToZero(etCarbohydrates.getText().toString())));
+        food.setProtein(Float.parseFloat(emptyToZero(etProtein.getText().toString())));
+        food.setSaturatedFat(Float.parseFloat(emptyToZero(etSaturatedFat.getText().toString())));
+        food.setCholesterol(Float.parseFloat(emptyToZero(etChoresterol.getText().toString())));
+        food.setSodium(Float.parseFloat(emptyToZero(etSodium.getText().toString())));
+        food.setDietaryFiber(Float.parseFloat(emptyToZero(etDietaryFiber.getText().toString())));
+        food.setSugars(Float.parseFloat(emptyToZero(etSugars.getText().toString())));
     }
 
     private String emptyToZero(String num) {

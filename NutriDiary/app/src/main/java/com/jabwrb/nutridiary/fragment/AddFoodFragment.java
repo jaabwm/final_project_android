@@ -174,7 +174,7 @@ public class AddFoodFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                onAddToDiary();
+                addToDiary();
                 return true;
 
             default:
@@ -182,7 +182,7 @@ public class AddFoodFragment extends Fragment {
         }
     }
 
-    private void onAddToDiary() {
+    private void addToDiary() {
         if (!validate()) {
             return;
         }
@@ -217,7 +217,6 @@ public class AddFoodFragment extends Fragment {
             }
         }).execute(food);
     }
-
 
 
     private void addFoodEntry(int foodId) {

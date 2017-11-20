@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     public Date currentDate;
 
     public interface HomeFragmentListener {
-        void onBtnAddBreakfastPressed();
+        void onFabAddEntryPressed();
 
         void onBtnDatePickerPressed();
 
@@ -378,11 +378,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
                 break;
 
             case R.id.fabAddEntry:
-                listener.onBtnAddBreakfastPressed();
+                listener.onFabAddEntryPressed();
                 break;
         }
     }
 
+    /**
+     * DatePickerFragment
+     */
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();

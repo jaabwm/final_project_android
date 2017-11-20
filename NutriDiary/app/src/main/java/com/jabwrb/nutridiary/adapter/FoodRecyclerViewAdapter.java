@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.jabwrb.nutridiary.R;
@@ -22,6 +23,8 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
 
     public interface OnFoodClickListener {
         void onFoodClicked(Food food);
+
+        void onFoodInfoClicked(Food food);
     }
 
     public FoodRecyclerViewAdapter(Context context) {
@@ -46,8 +49,8 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         DecimalFormat formatter = new DecimalFormat("####.##");
         // 100.77 g, 300 cal
         String subline = formatter.format(food.getServingSizeUnit()) + " " +
-                        food.getServingSizeMeasurement() + ", " +
-                        food.getCalories() + " cal";
+                food.getServingSizeMeasurement() + ", " +
+                food.getCalories() + " cal";
 
         holder.food = food;
         holder.tvFoodName.setText(food.getName());
@@ -68,6 +71,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         Food food;
         TextView tvFoodName;
         TextView tvSubline;
+        ImageButton imgBtnInfo;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -75,11 +79,20 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
             itemView.setOnClickListener(this);
             tvFoodName = itemView.findViewById(R.id.tvFoodName);
             tvSubline = itemView.findViewById(R.id.tvSubline);
+            imgBtnInfo = itemView.findViewById(R.id.imgBtnInfo);
+            imgBtnInfo.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            listener.onFoodClicked(food);
+            switch (view.getId()) {
+                case R.id.imgBtnInfo:
+                    listener.onFoodInfoClicked(food);
+                    break;
+
+                default:
+                    listener.onFoodClicked(food);
+            }
         }
     }
 }

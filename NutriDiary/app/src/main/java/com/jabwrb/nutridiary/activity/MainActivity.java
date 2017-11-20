@@ -56,8 +56,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         outState.putLong(KEY_CURRENT_DATE, currentDate.getTime());
     }
 
+    /**
+     * HomeFragment
+     */
     @Override
-    public void onBtnAddBreakfastPressed() {
+    public void onFabAddEntryPressed() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -83,6 +86,31 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                 .commit();
     }
 
+    /**
+     * AddFoodFragment
+     */
+    @Override
+    public void onActionAddPressed() {
+        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().popBackStack();
+    }
+
+    /**
+     * SelectFoodFragment
+     */
+    @Override
+    public void onActionCreatePressed() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.fragmentContainer, new CreateFoodFragment().newInstance(new Food(), CreateFoodFragment.ACTION_INSERT))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    /**
+     * FoodRecyclerViewAdapter
+     */
     @Override
     public void onFoodClicked(Food food) {
         getSupportFragmentManager()
@@ -94,24 +122,29 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
     @Override
-    public void onActionAddPressed() {
-        getSupportFragmentManager().popBackStack();
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void onActionCreatePressed() {
+    public void onFoodInfoClicked(Food food) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragmentContainer, new CreateFoodFragment())
+                .replace(R.id.fragmentContainer, new CreateFoodFragment().newInstance(food, CreateFoodFragment.ACTION_UPDATE))
                 .addToBackStack(null)
                 .commit();
     }
 
+    /**
+     * CreateFoodFragment
+     */
     @Override
-    public void onBtnAddPressed() {
+    public void onMenuConfirmPressed() {
+        SelectFoodFragment fragment = (SelectFoodFragment) getSupportFragmentManager().findFragmentByTag(SelectFoodFragment.TAG);
+        fragment.queryFoods();
         getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onUpdated() {
+        SelectFoodFragment fragment = (SelectFoodFragment) getSupportFragmentManager().findFragmentByTag(SelectFoodFragment.TAG);
+        fragment.queryFoods();
         getSupportFragmentManager().popBackStack();
     }
 
@@ -121,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         fragment.showDialogDelete(foodEntry);
     }
 
+    // getter & setter
     public Date getCurrentDate() {
         return currentDate;
     }

@@ -88,7 +88,7 @@ public class FoodEntryRecyclerViewAdapter extends RecyclerView.Adapter<FoodEntry
         public boolean onLongClick(View view) {
             listener.onFoodEntryLongClicked(foodEntry);
 
-            return false;
+            return true;
         }
     }
 }
