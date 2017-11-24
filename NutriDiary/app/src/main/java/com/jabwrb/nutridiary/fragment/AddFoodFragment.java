@@ -203,7 +203,7 @@ public class AddFoodFragment extends Fragment {
 
     private boolean validate() {
         if (etAmount.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Please enter amount.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.amount_missed_error), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

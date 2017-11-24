@@ -103,6 +103,12 @@ public class CreateFoodFragment extends Fragment {
         activity.setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
 
+        if (action == ACTION_INSERT) {
+            toolbar.setTitle("Create your Food");
+        } else if (action == ACTION_UPDATE) {
+            toolbar.setTitle("Update food");
+        }
+
         etName = view.findViewById(R.id.etName);
         etBrand = view.findViewById(R.id.etBrand);
         etServingSizeUnit = view.findViewById(R.id.etServingSizeUnit);
@@ -188,7 +194,7 @@ public class CreateFoodFragment extends Fragment {
                         }
                     }).execute(food);
                 } else {
-                    Toast.makeText(getActivity(), "Fail to create.\nAlready has this food.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.duplicate_food_error), Toast.LENGTH_SHORT).show();
                 }
             }
         }).execute(food);
@@ -204,6 +210,7 @@ public class CreateFoodFragment extends Fragment {
         new UpdateFoodTask(db, new UpdateFoodTask.OnFoodUpdateListener() {
             @Override
             public void onFoodUpdated() {
+                Toast.makeText(getActivity(), getResources().getString(R.string.updated), Toast.LENGTH_SHORT).show();
                 listener.onUpdated();
             }
         }).execute(food);
@@ -214,7 +221,7 @@ public class CreateFoodFragment extends Fragment {
                 etCalories.getText().toString().isEmpty() ||
                 etServingSizeUnit.getText().toString().isEmpty() ||
                 etServingSizeMeasurement.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Please enter the required information.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.info_missed_error), Toast.LENGTH_LONG).show();
             return false;
         }
         return true;

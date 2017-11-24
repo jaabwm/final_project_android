@@ -454,7 +454,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
             @Override
             public void onFoodEntryDeleted() {
                 queryFoodEntries(currentDate);
-                Toast.makeText(getActivity(), "Deleted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.deleted), Toast.LENGTH_SHORT).show();
             }
         }).execute(foodEntry);
     }

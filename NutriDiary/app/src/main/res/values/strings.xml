@@ -38,4 +38,9 @@
     <string name="snack">Snack</string>
     <string name="calories">Calories</string>
     <string name="calories_lowercase">calories</string>
+    <string name="info_missed_error">Please enter all required information.</string>
+    <string name="amount_missed_error">Please enter the amount.</string>
+    <string name="duplicate_food_error">Already had this food.</string>
+    <string name="deleted">Deleted.</string>
+    <string name="updated">Updated.</string>
 </resources>
