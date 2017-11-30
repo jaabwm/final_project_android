@@ -206,71 +206,13 @@ public class ApiFoodFragment extends Fragment {
             public void onResponse(Call<NutrientReportResponse> call, Response<NutrientReportResponse> response) {
                 if (response.isSuccessful()) {
                     List<FoodUsda> foodUsdaList = response.body().getReport().getFoods();
-                    FoodUsda foodUsda;
 
                     if (foodUsdaList.size() == 0) {
                         rows--;
-                        return;
                     } else {
-                        foodUsda = foodUsdaList.get(0);
+                        Food food = createFoodFromUsda(foodUsdaList);
+                        addRecyclerViewData(food);
                     }
-
-                    List<Nutrient> nutrients = foodUsda.getNutrients();
-
-                    Food food = new Food();
-                    food.setName(foodUsda.getName());
-                    food.setBrand("");
-                    food.setServingSizeUnit(100);
-                    food.setServingSizeMeasurement("g");
-
-                    for (Nutrient n : nutrients) {
-                        float gram;
-                        if (n.getGm().equals("--")) {
-                            gram = 0;
-                        } else {
-                            gram = Float.parseFloat(n.getGm());
-                        }
-
-                        switch (n.getNutrient_id()) {
-                            case UsdaApi.ID_CALORIES:
-                                food.setCalories((int) gram);
-                                break;
-
-                            case UsdaApi.ID_FAT:
-                                food.setFat(gram);
-                                break;
-
-                            case UsdaApi.ID_CARBOHYDRATES:
-                                food.setCarbohydrates(gram);
-                                break;
-
-                            case UsdaApi.ID_PROTEIN:
-                                food.setProtein(gram);
-                                break;
-
-                            case UsdaApi.ID_SATURATED_FAT:
-                                food.setSaturatedFat(gram);
-                                break;
-
-                            case UsdaApi.ID_CHOLESTEROL:
-                                food.setCholesterol(gram);
-                                break;
-
-                            case UsdaApi.ID_SODIUM:
-                                food.setSodium(gram);
-                                break;
-
-                            case UsdaApi.ID_DIETARY_FIBER:
-                                food.setDietaryFiber(gram);
-                                break;
-
-                            case UsdaApi.ID_SUGARS:
-                                food.setSugars(gram);
-                                break;
-                        }
-                    }
-
-                    addRecyclerViewData(food);
                 } else {
                     rows--;
                 }
@@ -286,5 +228,65 @@ public class ApiFoodFragment extends Fragment {
                 t.printStackTrace();
             }
         });
+    }
+
+    private Food createFoodFromUsda(List<FoodUsda> foodUsdaList) {
+        FoodUsda foodUsda = foodUsdaList.get(0);
+        List<Nutrient> nutrients = foodUsdaList.get(0).getNutrients();
+
+        Food food = new Food();
+        food.setName(foodUsda.getName());
+        food.setBrand("");
+        food.setServingSizeUnit(100);
+        food.setServingSizeMeasurement("g");
+
+        for (Nutrient n : nutrients) {
+            float gram;
+            if (n.getGm().equals("--")) {
+                gram = 0;
+            } else {
+                gram = Float.parseFloat(n.getGm());
+            }
+
+            switch (n.getNutrient_id()) {
+                case UsdaApi.ID_CALORIES:
+                    food.setCalories((int) gram);
+                    break;
+
+                case UsdaApi.ID_FAT:
+                    food.setFat(gram);
+                    break;
+
+                case UsdaApi.ID_CARBOHYDRATES:
+                    food.setCarbohydrates(gram);
+                    break;
+
+                case UsdaApi.ID_PROTEIN:
+                    food.setProtein(gram);
+                    break;
+
+                case UsdaApi.ID_SATURATED_FAT:
+                    food.setSaturatedFat(gram);
+                    break;
+
+                case UsdaApi.ID_CHOLESTEROL:
+                    food.setCholesterol(gram);
+                    break;
+
+                case UsdaApi.ID_SODIUM:
+                    food.setSodium(gram);
+                    break;
+
+                case UsdaApi.ID_DIETARY_FIBER:
+                    food.setDietaryFiber(gram);
+                    break;
+
+                case UsdaApi.ID_SUGARS:
+                    food.setSugars(gram);
+                    break;
+            }
+        }
+
+        return food;
     }
 }

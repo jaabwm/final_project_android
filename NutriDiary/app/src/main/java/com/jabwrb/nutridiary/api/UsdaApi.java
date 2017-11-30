@@ -36,7 +36,7 @@ public interface UsdaApi {
     @GET("search/?format=JSON" +
             "&api_key=" + API_KEY +
             "&ds=Standard Reference" +
-            "&sort=n" +
+            "&sort=r" +
             "&max=50")
     Call<SearchResponse> searchFood(@Query("q") String q);
 }
