@@ -64,7 +64,7 @@ public class ApiFoodFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new FoodRecyclerViewAdapter(getActivity());
+        adapter = new FoodRecyclerViewAdapter(getActivity(), TAG);
         data = new ArrayList<>();
     }
 

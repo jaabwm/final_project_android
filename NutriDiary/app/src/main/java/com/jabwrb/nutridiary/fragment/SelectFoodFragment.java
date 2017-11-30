@@ -51,7 +51,7 @@ public class SelectFoodFragment extends Fragment {
 
         listener = (SelectFoodFragmentListener) getActivity();
 
-        adapter = new FoodRecyclerViewAdapter(getActivity());
+        adapter = new FoodRecyclerViewAdapter(getActivity(), TAG);
 
         queryFoods();
     }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.database.Food;
+import com.jabwrb.nutridiary.fragment.ApiFoodFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
     private Context context;
     private OnFoodClickListener listener;
     private List<Food> data;
+    private String tag;
 
     public interface OnFoodClickListener {
         void onFoodClicked(Food food);
@@ -27,10 +29,11 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         void onFoodInfoClicked(Food food);
     }
 
-    public FoodRecyclerViewAdapter(Context context) {
+    public FoodRecyclerViewAdapter(Context context, String tag) {
         this.context = context;
         this.listener = (OnFoodClickListener) context;
         this.data = new ArrayList<>();
+        this.tag = tag;
     }
 
     @Override
@@ -55,6 +58,9 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         holder.food = food;
         holder.tvFoodName.setText(food.getName());
         holder.tvSubline.setText(subline);
+        if (tag.equals(ApiFoodFragment.TAG)) {
+            holder.imgBtnInfo.setVisibility(View.GONE);
+        }
     }
 
     @Override
