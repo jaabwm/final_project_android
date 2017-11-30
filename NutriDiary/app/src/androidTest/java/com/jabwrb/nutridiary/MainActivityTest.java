@@ -20,6 +20,7 @@ import com.jabwrb.nutridiary.activity.MainActivity;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,6 +52,14 @@ public class MainActivityTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void setup() {
+        onView(withId(R.id.btnDatePicker)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(2017, 11, 30));
+        onView(withText("OK")).perform(click());
+    }
 
     @Test
     public void test00() {
@@ -375,6 +384,30 @@ public class MainActivityTest {
         onView(withId(R.id.listFood)).check(matches(atPosition(0, hasDescendant(withText("100 g, 500 cal")))));
 
         SystemClock.sleep(3500);
+    }
+
+    @Test
+    public void test15() {
+        /**
+         * Date picker ลบ 1 วัน
+         * จะต้องเจอ 11 Dec 2017
+         */
+        onView(withId(R.id.imgBtnDateDec)).perform(click());
+
+        onView(withId(R.id.btnDatePicker)).check(matches(withText("29 Nov 2017")));
+
+    }
+
+    @Test
+    public void test16() {
+        /**
+         * Date picker เพิ่ม 1 วัน
+         * จะต้องเจอ 12 Dec 2017
+         */
+        onView(withId(R.id.imgBtnDateInc)).perform(click());
+
+        onView(withId(R.id.btnDatePicker)).check(matches(withText("1 Dec 2017")));
+
     }
 
     private void addFoodEntry(String food, String amount, String meal) {

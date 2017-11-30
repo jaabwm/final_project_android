@@ -29,20 +29,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rectangle">
+
+                <ImageButton
+                    android:id="@+id/imgBtnDateDec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="12dp"
+                    app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
 
                 <Button
                     android:id="@+id/btnDatePicker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:background="?attr/selectableItemBackground"
+                    android:drawableLeft="@drawable/ic_calendar_wednesday"
                     android:drawablePadding="8dp"
+                    android:padding="8dp"
                     android:text="DATE" />
-            </FrameLayout>
+
+                <ImageButton
+                    android:id="@+id/imgBtnDateInc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="12dp"
+                    app:srcCompat="@drawable/ic_chevron_right_black_24dp" />
+            </RelativeLayout>
 
             <!-- Summary -->
             <LinearLayout

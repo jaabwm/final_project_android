@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
     private NutriDiaryDb db;
     private HomeFragmentListener listener;
     private Button btnDatePicker;
+    private ImageButton imgBtnDateDec;
+    private ImageButton imgBtnDateInc;
     private FloatingActionButton fabAddEntry;
     private TextView tvCalEaten;
     private TextView tvFatEaten;
@@ -138,6 +141,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
         btnDatePicker = view.findViewById(R.id.btnDatePicker);
         btnDatePicker.setOnClickListener(this);
         setBtnDatePickerInfo(currentDate);
+
+        imgBtnDateDec = view.findViewById(R.id.imgBtnDateDec);
+        imgBtnDateInc = view.findViewById(R.id.imgBtnDateInc);
+
+        imgBtnDateDec.setOnClickListener(this);
+        imgBtnDateInc.setOnClickListener(this);
 
         fabAddEntry = view.findViewById(R.id.fabAddEntry);
         fabAddEntry.setOnClickListener(this);
@@ -377,10 +386,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
                 listener.onBtnDatePickerPressed();
                 break;
 
+            case R.id.imgBtnDateDec:
+                addDaysToCurrentDate(-1);
+                break;
+
+            case R.id.imgBtnDateInc:
+                addDaysToCurrentDate(1);
+                break;
+
             case R.id.fabAddEntry:
                 listener.onFabAddEntryPressed();
                 break;
         }
+    }
+
+    private void addDaysToCurrentDate(int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DATE, days);
+
+        currentDate = calendar.getTime();
+
+        invalidateDate();
+    }
+
+    private void invalidateDate() {
+        ((MainActivity) getActivity()).setCurrentDate(currentDate);
+        setBtnDatePickerInfo(currentDate);
+        queryFoodEntries(currentDate);
     }
 
     /**
@@ -393,9 +426,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Date
 
         currentDate = calendar.getTime();
 
-        ((MainActivity) getActivity()).setCurrentDate(currentDate);
-        setBtnDatePickerInfo(currentDate);
-        queryFoodEntries(currentDate);
+        invalidateDate();
     }
 
     private void setBtnDatePickerInfo(Date date) {
