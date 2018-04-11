@@ -39,29 +39,11 @@ public class LoadFoodEntriesWithFoodTask extends AsyncTask<Date, Void, List<Food
         dayEnd.setMinutes(59);
         dayEnd.setSeconds(59);
 
-        System.out.println("Query between " + dayStart.toString() + " and " + dayEnd.toString());
-
         return db.foodEntryDao().loadFoodEntriesWithFood(dayStart, dayEnd);
     }
 
     @Override
     protected void onPostExecute(List<FoodEntryWithFood> foodEntryWithFoodList) {
         listener.onFoodLoaded(foodEntryWithFoodList);
-
-        //print data loaded
-        System.out.println("------------------------------");
-        for(FoodEntryWithFood feWithF : foodEntryWithFoodList) {
-            List<Food> fs = feWithF.getFoods();
-            FoodEntry fe = feWithF.getFoodEntry();
-
-            System.out.printf("Entry no.%d (foodId: %d, meal: %s, date: %s)\n",
-                    fe.getId(), fe.getFoodId(), fe.getMeal(), fe.getDate().toString());
-
-            for (Food f : fs) {
-                System.out.printf("FoodUsda no.%d details (name: %s, brand: %s, cal: %d, fat: %f, carb: %f, protein: %f)\n\n",
-                        f.getId(), f.getName(), f.getBrand(), f.getCalories(), f.getFat(), f.getCarbohydrates(), f.getProtein());
-            }
-        }
-        System.out.println("------------------------------");
     }
 }

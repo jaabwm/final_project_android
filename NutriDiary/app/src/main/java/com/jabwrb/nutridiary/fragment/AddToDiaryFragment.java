@@ -35,11 +35,11 @@ import java.text.DecimalFormat;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddFoodFragment extends Fragment {
+public class AddToDiaryFragment extends Fragment {
 
     public static final String KEY_FOOD = "food";
     private NutriDiaryDb db;
-    private AddFoodFragmentListener listener;
+    private AddToDiaryFragmentListener listener;
     private Food food;
     private EditText etAmount;
     private Spinner spinner;
@@ -56,18 +56,18 @@ public class AddFoodFragment extends Fragment {
     private TextView tvProtein;
     private TextView tvBrand;
 
-    public interface AddFoodFragmentListener {
+    public interface AddToDiaryFragmentListener {
         void onActionAddPressed();
     }
 
-    public AddFoodFragment() {
+    public AddToDiaryFragment() {
         // Required empty public constructor
     }
 
-    public static AddFoodFragment newInstance(Food food) {
+    public static AddToDiaryFragment newInstance(Food food) {
         Bundle args = new Bundle();
         args.putParcelable(KEY_FOOD, food);
-        AddFoodFragment fragment = new AddFoodFragment();
+        AddToDiaryFragment fragment = new AddToDiaryFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -81,7 +81,7 @@ public class AddFoodFragment extends Fragment {
 
         db = DatabaseSingleton.getDatabaseInstance().getDb();
 
-        listener = (AddFoodFragmentListener) getActivity();
+        listener = (AddToDiaryFragmentListener) getActivity();
     }
 
     @Override

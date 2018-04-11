@@ -395,7 +395,6 @@ public class MainActivityTest {
         onView(withId(R.id.imgBtnDateDec)).perform(click());
 
         onView(withId(R.id.btnDatePicker)).check(matches(withText("29 Nov 2017")));
-
     }
 
     @Test
@@ -407,7 +406,6 @@ public class MainActivityTest {
         onView(withId(R.id.imgBtnDateInc)).perform(click());
 
         onView(withId(R.id.btnDatePicker)).check(matches(withText("1 Dec 2017")));
-
     }
 
     private void addFoodEntry(String food, String amount, String meal) {

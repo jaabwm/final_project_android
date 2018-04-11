@@ -27,19 +27,19 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SelectFoodFragment extends Fragment {
+public class MyFoodFragment extends Fragment {
 
-    public static final String TAG = SelectFoodFragment.class.getSimpleName();
+    public static final String TAG = MyFoodFragment.class.getSimpleName();
     private NutriDiaryDb db;
-    private SelectFoodFragmentListener listener;
+    private MyFoodFragmentListener listener;
     private RecyclerView recyclerView;
     private FoodRecyclerViewAdapter adapter;
 
-    public interface SelectFoodFragmentListener {
+    public interface MyFoodFragmentListener {
         void onActionCreatePressed();
     }
 
-    public SelectFoodFragment() {
+    public MyFoodFragment() {
         // Required empty public constructor
     }
 
@@ -49,7 +49,7 @@ public class SelectFoodFragment extends Fragment {
 
         db = DatabaseSingleton.getDatabaseInstance().getDb();
 
-        listener = (SelectFoodFragmentListener) getActivity();
+        listener = (MyFoodFragmentListener) getActivity();
 
         adapter = new FoodRecyclerViewAdapter(getActivity(), TAG);
 

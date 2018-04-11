@@ -184,15 +184,15 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Header"
+                        style="@style/HeaderMeal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/breakfast"
-                        android:textSize="28sp" />
+                        android:textSize="24sp" />
 
                     <TextView
                         android:id="@+id/tvCalBreakfast"
-                        style="@style/Header"
+                        style="@style/HeaderCalories"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -228,7 +228,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Header"
+                        style="@style/HeaderMeal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/lunch"
@@ -236,7 +236,7 @@
 
                     <TextView
                         android:id="@+id/tvCalLunch"
-                        style="@style/Header"
+                        style="@style/HeaderCalories"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -272,7 +272,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Header"
+                        style="@style/HeaderMeal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/dinner"
@@ -280,7 +280,7 @@
 
                     <TextView
                         android:id="@+id/tvCalDinner"
-                        style="@style/Header"
+                        style="@style/HeaderCalories"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -316,7 +316,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Header"
+                        style="@style/HeaderMeal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/snack"
@@ -324,7 +324,7 @@
 
                     <TextView
                         android:id="@+id/tvCalSnack"
-                        style="@style/Header"
+                        style="@style/HeaderCalories"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"

@@ -15,8 +15,13 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
-    <style name="Header">
-        <item name="android:textSize">20sp</item>
+    <style name="HeaderMeal">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="HeaderCalories">
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 

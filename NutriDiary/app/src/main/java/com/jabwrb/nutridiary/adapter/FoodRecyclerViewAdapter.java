@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.jabwrb.nutridiary.R;
 import com.jabwrb.nutridiary.database.Food;
-import com.jabwrb.nutridiary.fragment.ApiFoodFragment;
+import com.jabwrb.nutridiary.fragment.SearchFoodFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         holder.food = food;
         holder.tvFoodName.setText(food.getName());
         holder.tvSubline.setText(subline);
-        if (tag.equals(ApiFoodFragment.TAG)) {
+        if (tag.equals(SearchFoodFragment.TAG)) {
             holder.imgBtnInfo.setVisibility(View.GONE);
         }
     }

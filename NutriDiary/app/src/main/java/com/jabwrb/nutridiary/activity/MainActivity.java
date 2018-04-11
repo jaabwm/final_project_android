@@ -11,19 +11,19 @@ import com.jabwrb.nutridiary.adapter.FoodRecyclerViewAdapter;
 import com.jabwrb.nutridiary.database.DatabaseSingleton;
 import com.jabwrb.nutridiary.database.Food;
 import com.jabwrb.nutridiary.database.FoodEntry;
-import com.jabwrb.nutridiary.fragment.AddFoodFragment;
-import com.jabwrb.nutridiary.fragment.ApiFoodFragment;
+import com.jabwrb.nutridiary.fragment.AddToDiaryFragment;
+import com.jabwrb.nutridiary.fragment.MyFoodFragment;
+import com.jabwrb.nutridiary.fragment.SearchFoodFragment;
 import com.jabwrb.nutridiary.fragment.CreateFoodFragment;
 import com.jabwrb.nutridiary.fragment.DatePickerFragment;
 import com.jabwrb.nutridiary.fragment.HomeFragment;
-import com.jabwrb.nutridiary.fragment.SelectFoodFragment;
 
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.HomeFragmentListener,
-                                                            SelectFoodFragment.SelectFoodFragmentListener,
+                                                            MyFoodFragment.MyFoodFragmentListener,
                                                             CreateFoodFragment.CreateFoodFragmentListener,
-                                                            AddFoodFragment.AddFoodFragmentListener,
+                                                            AddToDiaryFragment.AddToDiaryFragmentListener,
                                                             FoodEntryRecyclerViewAdapter.OnFoodEntryClickListener,
                                                             FoodRecyclerViewAdapter.OnFoodClickListener {
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragmentContainer, new SelectFoodFragment(), SelectFoodFragment.TAG)
+                .replace(R.id.fragmentContainer, new MyFoodFragment(), MyFoodFragment.TAG)
                 .addToBackStack(null)
                 .commit();
     }
@@ -81,13 +81,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragmentContainer, new ApiFoodFragment(), ApiFoodFragment.TAG)
+                .replace(R.id.fragmentContainer, new SearchFoodFragment(), SearchFoodFragment.TAG)
                 .addToBackStack(null)
                 .commit();
     }
 
     /**
-     * AddFoodFragment
+     * AddToDiaryFragment
      */
     @Override
     public void onActionAddPressed() {
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
     /**
-     * SelectFoodFragment
+     * MyFoodFragment
      */
     @Override
     public void onActionCreatePressed() {
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         getSupportFragmentManager()
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragmentContainer, new AddFoodFragment().newInstance(food))
+                .replace(R.id.fragmentContainer, new AddToDiaryFragment().newInstance(food))
                 .addToBackStack(null)
                 .commit();
     }
@@ -136,14 +136,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
      */
     @Override
     public void onMenuConfirmPressed() {
-        SelectFoodFragment fragment = (SelectFoodFragment) getSupportFragmentManager().findFragmentByTag(SelectFoodFragment.TAG);
+        MyFoodFragment fragment = (MyFoodFragment) getSupportFragmentManager().findFragmentByTag(MyFoodFragment.TAG);
         fragment.queryFoods();
         getSupportFragmentManager().popBackStack();
     }
 
     @Override
     public void onUpdated() {
-        SelectFoodFragment fragment = (SelectFoodFragment) getSupportFragmentManager().findFragmentByTag(SelectFoodFragment.TAG);
+        MyFoodFragment fragment = (MyFoodFragment) getSupportFragmentManager().findFragmentByTag(MyFoodFragment.TAG);
         fragment.queryFoods();
         getSupportFragmentManager().popBackStack();
     }

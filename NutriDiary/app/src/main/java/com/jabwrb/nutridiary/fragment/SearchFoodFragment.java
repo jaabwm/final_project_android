@@ -42,9 +42,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ApiFoodFragment extends Fragment {
+public class SearchFoodFragment extends Fragment {
 
-    public static final String TAG = ApiFoodFragment.class.getSimpleName();
+    public static final String TAG = SearchFoodFragment.class.getSimpleName();
     private OkHttpClient client;
     private Retrofit retrofit;
     private boolean isLoading;
@@ -56,7 +56,7 @@ public class ApiFoodFragment extends Fragment {
     private FoodRecyclerViewAdapter adapter;
     private List<Food> data;
 
-    public ApiFoodFragment() {
+    public SearchFoodFragment() {
         // Required empty public constructor
     }
 
@@ -72,7 +72,7 @@ public class ApiFoodFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_api_food, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_food, container, false);
 
         setup(view);
         api();
